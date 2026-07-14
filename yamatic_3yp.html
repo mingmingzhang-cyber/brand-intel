@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>YAMATIC — 3 Year Growth Plan · Pattern</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&family=STIX+Two+Text:ital,wght@1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Wix Madefor Display',sans-serif;background:#F4F6FA;color:#0D0F1A;font-size:13px}
+
+/* ── HEADER ── */
+.hdr{height:52px;background:#fff;border-bottom:1px solid #E2E8F2;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.hdr-left{display:flex;align-items:baseline;gap:10px}
+.hdr-brand{font-size:17px;font-weight:800;letter-spacing:-.4px}
+.hdr-sub{font-size:11px;color:#8A9AB5}
+.hdr-badge{background:#EFF6FF;color:#3A55FF;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;border:1px solid rgba(58,85,255,.2)}
+.hdr-badge.green{background:#F0FDF4;color:#16a34a;border-color:rgba(22,163,74,.2)}
+.logo svg{width:88px;height:auto}
+.accent{height:3px;background:linear-gradient(90deg,#009BFF,#3A55FF,#770BFF);flex-shrink:0}
+
+/* ── LAYOUT ── */
+.body{display:flex;height:calc(100vh - 55px);overflow:hidden}
+
+/* ── LEFT PANEL ── */
+.panel{width:300px;min-width:300px;background:#fff;border-right:1px solid #E2E8F2;overflow-y:auto;padding:16px 14px 24px;display:flex;flex-direction:column;gap:16px}
+
+.section-label{font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#8A9AB5;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#E2E8F2}
+
+/* baseline */
+.base-card{background:#F4F6FA;border:1.5px solid #3A55FF;border-radius:10px;padding:10px 14px}
+.base-card .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3A55FF;margin-bottom:3px}
+.base-card input{width:100%;background:transparent;border:none;font-size:20px;font-weight:800;color:#0D0F1A;font-family:'Wix Madefor Display',sans-serif;outline:none;letter-spacing:-.5px}
+
+/* lever cards */
+.lever{border-radius:9px;padding:9px 11px;margin-bottom:6px}
+.lever.purple{background:#FAF5FF;border:1.5px solid rgba(119,11,255,.25)}
+.lever.slate{background:#F4F6FA;border:1px solid #E2E8F2}
+.lever.blue{background:#EFF6FF;border:1px solid rgba(58,85,255,.2)}
+
+.lever-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.lever-name{font-size:12px;font-weight:700}
+.lever-name.c-purple{color:#770BFF}
+.lever-name.c-blue{color:#3A55FF}
+
+/* manual badge */
+.manual-tag{font-size:8.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:1.5px 6px;border-radius:10px;background:#FFF7ED;color:#C2410C;border:1px solid rgba(194,65,12,.2);flex-shrink:0}
+.kitchen-tag{font-size:8.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:1.5px 6px;border-radius:10px;background:#F0FDF4;color:#16a34a;border:1px solid rgba(22,163,74,.2);flex-shrink:0}
+
+.rate-row{display:flex;align-items:center;gap:5px;font-size:10.5px;color:#8A9AB5}
+.rate-inp{width:50px;padding:2px 6px;font-size:11px;font-weight:600;background:#fff;border:1px solid #E2E8F2;border-radius:5px;color:#0D0F1A;font-family:'Wix Madefor Display',sans-serif;outline:none;text-align:right}
+.rate-inp:focus{border-color:#3A55FF}
+
+.slider-row{display:flex;align-items:center;gap:7px;margin:4px 0}
+.slider-row input[type=range]{flex:1;height:3px;cursor:pointer}
+.slider-row input[type=range].r-purple{accent-color:#770BFF}
+.slider-row input[type=range].r-blue{accent-color:#3A55FF}
+.slider-pct{font-size:12px;font-weight:700;min-width:34px;text-align:right}
+
+.lever-result{font-size:14px;font-weight:800;text-align:right;margin-top:2px}
+.lever-hint{font-size:10px;color:#8A9AB5;text-align:right;margin-top:1px}
+
+.seo-input{width:100%;margin-top:5px;background:#fff;border:1px solid #E2E8F2;border-radius:6px;padding:5px 9px;font-size:15px;font-weight:700;color:#3A55FF;font-family:'Wix Madefor Display',sans-serif;outline:none}
+.seo-input:focus{border-color:#3A55FF}
+
+.wf-total{background:linear-gradient(135deg,rgba(58,85,255,.07),rgba(119,11,255,.07));border:1.5px solid rgba(58,85,255,.2);border-radius:9px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.wf-total-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#8A9AB5}
+.wf-total-val{font-size:16px;font-weight:800;color:#3A55FF}
+
+/* year-grid inputs */
+.ig{border-radius:9px;padding:9px 11px;margin-bottom:6px}
+.ig.blue{background:#EFF6FF;border:1px solid rgba(58,85,255,.2)}
+.ig.purple{background:#FAF5FF;border:1px solid rgba(119,11,255,.15)}
+.ig-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ig-lbl{font-size:11px;font-weight:600;color:#8A9AB5}
+.ygrid{display:grid;grid-template-columns:62px 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:3px}
+.ygrid-hdr{font-size:9px;font-weight:700;text-align:center;padding:2px 3px;border-radius:4px}
+.ygrid-hdr.y0{color:#8A9AB5;background:#F4F6FA}
+.ygrid-hdr.y1{color:#1e3a8a;background:#DBEAFE}
+.ygrid-hdr.y2{color:#4c1d95;background:#EDE9FE}
+.ygrid-hdr.y3{color:#064e3b;background:#D1FAE5}
+.yr{width:100%;padding:3px 4px;font-size:11px;font-weight:600;border:1.5px solid #E2E8F2;border-radius:5px;text-align:center;background:#fff;color:#0D0F1A;font-family:'Wix Madefor Display',sans-serif;outline:none}
+.yr:focus{border-color:#3A55FF}
+.yr.base-inp{color:#3A55FF;border-color:rgba(58,85,255,.35);background:#F4F6FA}
+.yr-lbl-cell{font-size:8.5px;color:#8A9AB5;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+
+/* cat picker */
+.cat-box{border-radius:9px;padding:9px 11px;background:#FAF5FF;border:1px solid rgba(119,11,255,.15)}
+.cat-list{display:flex;flex-direction:column;gap:4px;max-height:190px;overflow-y:auto;margin-bottom:7px}
+.cat-item{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:7px;cursor:pointer;border:1.5px solid transparent;background:#fff;transition:all .12s}
+.cat-item:hover{border-color:rgba(119,11,255,.25);background:#F3EEFF}
+.cat-item.on{border-color:#770BFF;background:#F3EEFF}
+.cat-item input[type=checkbox]{accent-color:#770BFF;cursor:pointer;flex-shrink:0}
+.cat-name{font-size:11.5px;font-weight:600;flex:1}
+.cat-g{font-size:11px;font-weight:700;min-width:42px;text-align:right}
+.cat-s{font-size:10px;color:#8A9AB5;min-width:36px;text-align:right}
+.weighted-row{background:rgba(119,11,255,.07);border-radius:7px;padding:6px 9px;display:flex;justify-content:space-between;align-items:center}
+.weighted-lbl{font-size:10px;font-weight:600;color:#8A9AB5}
+.weighted-val{font-size:15px;font-weight:800;color:#770BFF}
+
+/* summary card */
+.summary-card{background:linear-gradient(135deg,#009BFF,#3A55FF 55%,#770BFF);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(58,85,255,.25)}
+.summary-lbl{font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.summary-val{font-size:24px;font-weight:800;letter-spacing:-.5px;color:#fff;margin-top:3px}
+.summary-sub{font-size:10.5px;color:rgba(255,255,255,.65);margin-top:2px}
+
+/* ── RIGHT ── */
+.right{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F4F6FA}
+
+/* table */
+.tbl-wrap{padding:14px 18px 0;flex-shrink:0}
+.ytbl{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(13,15,26,.06);font-size:12px}
+.ytbl thead th{background:#0D0F1A;color:#fff;padding:8px 12px;font-size:9.5px;font-weight:600;text-align:left;white-space:nowrap}
+.ytbl thead th.r{text-align:right}
+.ytbl thead th.y1{background:#1e3a8a}
+.ytbl thead th.y2{background:#4c1d95}
+.ytbl thead th.y3{background:#064e3b}
+.ytbl tbody tr{border-bottom:1px solid #F4F6FA}
+.ytbl tbody tr:hover td{background:#FAFBFF}
+.ytbl td{padding:5px 12px;vertical-align:middle}
+.ytbl td.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ytbl td.y1c{background:rgba(219,234,254,.2)}
+.ytbl td.y2c{background:rgba(237,233,254,.2)}
+.ytbl td.y3c{background:rgba(209,250,229,.2)}
+.ytbl tr.gh td{background:#F4F6FA;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#8A9AB5;padding:5px 12px;border-bottom:1.5px solid #E2E8F2}
+.ytbl tr.sub td{font-weight:600;border-top:1.5px solid #E2E8F2}
+.ytbl tr.pat td{background:linear-gradient(90deg,rgba(219,234,254,.5),rgba(237,233,254,.35),rgba(209,250,229,.5));font-weight:700;border-top:2px solid #E2E8F2;font-size:12.5px}
+.ytbl tr.brb td{background:rgba(196,211,227,.12)}
+.ytbl tr.dlt td{border-top:2px solid rgba(58,85,255,.2);font-weight:700;font-size:13px}
+.pv{color:#16a34a}.nv{color:#dc2626}
+.dim{color:#8A9AB5;font-size:11px}
+
+/* chart */
+.chart-area{flex:1;padding:10px 18px 10px;display:flex;flex-direction:column;min-height:0}
+.chart-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-shrink:0}
+.chart-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8A9AB5}
+.legend{display:flex;gap:14px}
+.leg{display:flex;align-items:center;gap:5px;font-size:11.5px;color:#4A5568}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.chart-canvas{flex:1;position:relative;min-height:0}
+.footnote{font-size:9px;color:#C4D3E3;margin-top:6px;border-top:1px solid #E2E8F2;padding-top:6px;line-height:1.8;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-brand">YAMATIC</span>
+    <span class="hdr-sub">3 Year Growth Plan &nbsp;·&nbsp; Patio, Lawn &amp; Garden &nbsp;·&nbsp; Kitchen data Mar 22, 2026</span>
+    <span class="hdr-badge green">Kitchen</span>
+  </div>
+  <div class="logo">
+    <svg viewBox="0 0 675 135.7" xmlns="http://www.w3.org/2000/svg">
+      <style>.lb0{fill:#009BFF}.lb1{fill:#231F20}</style>
+      <path class="lb0" d="M81.55,0.99L0.99,81.55c-1.32,1.32-1.32,3.47,0,4.8l19.84,19.84c1.32,1.32,3.47,1.32,4.8,0l80.56-80.56c1.32-1.32,1.32-3.47,0-4.8L86.35,0.99C85.02-0.33,82.88-0.33,81.55,0.99z"/>
+      <path class="lb0" d="M114.73,34.17L67.37,81.54c-1.32,1.32-1.32,3.47,0,4.8l19.84,19.84c1.32,1.32,3.47,1.32,4.8,0l47.36-47.36c1.32-1.32,1.32-3.47,0-4.8l-19.84-19.84C118.2,32.85,116.05,32.85,114.73,34.17z"/>
+      <path class="lb1" d="M254.36,64.21c0,24.35-18.47,42.98-40.69,42.98c-12.74,0-22.39-5.23-28.6-13.73v40.25c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V25.35c0-1.1,0.89-2,2-2h13.65c1.1,0,2,0.89,2,2v9.77c6.21-8.66,15.85-13.89,28.6-13.89C235.9,21.23,254.36,40.02,254.36,64.21z M236.71,64.21c0-15.2-11.11-26.15-25.82-26.15c-14.71,0-25.82,10.95-25.82,26.15c0,15.2,11.11,26.15,25.82,26.15C225.6,90.35,236.71,79.4,236.71,64.21z"/>
+      <path class="lb1" d="M347.84,25.35v77.71c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2v-9.77c-6.21,8.66-15.85,13.89-28.6,13.89c-22.22,0-40.69-18.79-40.69-42.98c0-24.35,18.46-42.98,40.69-42.98c12.74,0,22.39,5.23,28.6,13.73v-9.6c0-1.1,0.89-2,2-2h13.65C346.95,23.35,347.84,24.25,347.84,25.35z M330.19,64.21c0-15.2-11.11-26.15-25.82-26.15s-25.82,10.95-25.82,26.15c0,15.2,11.11,26.15,25.82,26.15S330.19,79.4,330.19,64.21z"/>
+      <path class="lb1" d="M493.81,91.01c9.04,0,15.99-3.75,20.09-8.81c0.61-0.75,1.69-0.91,2.52-0.42l11.12,6.5c1.02,0.59,1.33,1.95,0.62,2.89c-7.59,10.04-19.37,16.03-34.51,16.03c-26.96,0-44.45-18.46-44.45-42.98c0-24.18,17.48-42.98,43.14-42.98c24.35,0,41.02,19.61,41.02,43.14c0,2.45-0.33,5.07-0.65,7.35h-65.04C470.44,84.47,480.74,91.01,493.81,91.01z M515.54,57.34c-2.45-14.05-12.75-20.1-23.37-20.1c-13.24,0-22.22,7.84-24.67,20.1H515.54z"/>
+      <path class="lb1" d="M675,54.89v48.17c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V56.69c0-12.42-7.19-18.96-18.3-18.96c-11.6,0-20.75,6.86-20.75,23.53v41.8c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V25.35c0-1.1,0.89-2,2-2h13.65c1.1,0,2,0.89,2,2v8.46c5.39-8.5,14.22-12.58,25.33-12.58C661.93,21.23,675,33.65,675,54.89z"/>
+      <path class="lb1" d="M583.58,21.88c-10.29,0-20.26,4.09-25.16,15.2V25.35c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v77.71c0,1.1,0.89,2,2,2h13.65c1.1,0,2-0.89,2-2V63.88c0-18.3,13.28-22.88,25.16-22.88h6.15c1.1,0,2-0.89,2-2V23.88c0-1.1-0.89-2-2-2H583.58z"/>
+      <path class="lb1" d="M397.4,40.35c1.1,0,2-0.89,2-2v-13c0-1.1-0.89-2-2-2h-21V2c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v78.96c0,16.77,8.09,24.83,24.97,24.83l13.68-0.01c1.1,0,2-0.9,2-2V91.42c0-1.1-0.9-2-2-2c-2.84,0-8.3-0.01-10.5-0.01c-8.05,0-10.5-2.09-10.5-9.85V40.35H397.4z"/>
+      <path class="lb1" d="M445.33,40.35c1.1,0,2-0.89,2-2v-13c0-1.1-0.89-2-2-2h-21V2c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v78.96c0,16.77,8.09,24.83,24.97,24.83l13.68-0.01c1.1,0,1.99-0.9,1.99-2V91.42c0-1.1-0.9-2-2-2c-2.84,0-8.3-0.01-10.5-0.01c-8.05,0-10.5-2.09-10.5-9.85V40.35H445.33z"/>
+    </svg>
+  </div>
+</div>
+<div class="accent"></div>
+
+<div class="body">
+
+<!-- ═══ LEFT PANEL ═══ -->
+<div class="panel">
+
+  <!-- Baseline -->
+  <div>
+    <div class="section-label">Baseline Revenue <span class="kitchen-tag">Kitchen</span></div>
+    <div class="base-card">
+      <div class="lbl">T12M Revenue</div>
+      <input type="text" id="base-rev-display" value="16,803,499" oninput="onBaseInput(this)" onblur="fmtBase(this)">
+      <input type="hidden" id="base-rev" value="16803499">
+    </div>
+  </div>
+
+  <!-- Waterfall -->
+  <div>
+    <div class="section-label">Year 1 Waterfall</div>
+
+    <!-- Lost Buybox -->
+    <div class="lever purple">
+      <div class="lever-top">
+        <span class="lever-name c-purple">Lost Buybox</span>
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="kitchen-tag">Kitchen</span>
+          <span class="rate-row">Rate <input class="rate-inp" id="lbb-rate" type="number" value="0" step="0.01" min="0" max="100" oninput="recalc()">%</span>
+        </div>
+      </div>
+      <div class="slider-row">
+        <input type="range" class="r-purple" id="lbb-solve" min="0" max="100" value="0" oninput="recalc()">
+        <span class="slider-pct" id="lbb-pct" style="color:#770BFF">0%</span>
+      </div>
+      <div class="lever-result" id="lbb-up" style="color:#770BFF">+$0</div>
+      <div class="lever-hint" id="lbb-base"></div>
+    </div>
+
+    <!-- OOS -->
+    <div class="lever slate">
+      <div class="lever-top">
+        <span class="lever-name">Out of Stock</span>
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="kitchen-tag">Kitchen</span>
+          <span class="rate-row">Rate <input class="rate-inp" id="oos-rate" type="number" value="6.75" step="0.01" min="0" max="100" oninput="recalc()">%</span>
+        </div>
+      </div>
+      <div class="slider-row">
+        <input type="range" class="r-blue" id="oos-solve" min="0" max="100" value="50" oninput="recalc()">
+        <span class="slider-pct" id="oos-pct" style="color:#3A55FF">50%</span>
+      </div>
+      <div class="lever-result" id="oos-up" style="color:#3A55FF">—</div>
+    </div>
+
+    <!-- Suppression -->
+    <div class="lever slate">
+      <div class="lever-top">
+        <span class="lever-name">Suppression</span>
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="kitchen-tag">Kitchen</span>
+          <span class="rate-row">Rate <input class="rate-inp" id="sup-rate" type="number" value="1.25" step="0.01" min="0" max="100" oninput="recalc()">%</span>
+        </div>
+      </div>
+      <div class="slider-row">
+        <input type="range" class="r-blue" id="sup-solve" min="0" max="100" value="50" oninput="recalc()">
+        <span class="slider-pct" id="sup-pct" style="color:#3A55FF">50%</span>
+      </div>
+      <div class="lever-result" id="sup-up" style="color:#3A55FF">—</div>
+    </div>
+
+    <!-- SEO -->
+    <div class="lever blue">
+      <div class="lever-top">
+        <span class="lever-name c-blue">SEO / Content Lift</span>
+        <span class="manual-tag">Manual</span>
+      </div>
+      <input class="seo-input" type="number" id="seo-value" value="168035" oninput="recalc()">
+      <div class="lever-result" id="seo-up" style="color:#3A55FF;margin-top:4px">—</div>
+    </div>
+
+    <div class="wf-total">
+      <span class="wf-total-lbl">Total Y1 Waterfall</span>
+      <span class="wf-total-val" id="wf-total">—</span>
+    </div>
+    <div style="font-size:9.5px;color:#8A9AB5;margin-top:5px">Y2 &amp; Y3 carry $0 from waterfall (per Excel model)</div>
+  </div>
+
+  <!-- Ads -->
+  <div>
+    <div class="section-label">Ads Assumptions <span class="manual-tag">Manual</span></div>
+
+    <div class="ig blue">
+      <div class="ig-top"><span class="ig-lbl">TACOS</span></div>
+      <div class="ygrid"><div class="yr-lbl-cell">Baseline</div><div class="ygrid-hdr y1">Y1</div><div class="ygrid-hdr y2">Y2</div><div class="ygrid-hdr y3">Y3</div></div>
+      <div class="ygrid">
+        <input class="yr base-inp" id="tacos-base" value="18.3%" oninput="syncY('tacos');recalc()">
+        <input class="yr" id="tacos-y1" value="18.3%" oninput="recalc()">
+        <input class="yr" id="tacos-y2" value="18.3%" oninput="recalc()">
+        <input class="yr" id="tacos-y3" value="18.3%" oninput="recalc()">
+      </div>
+    </div>
+
+    <div class="ig blue">
+      <div class="ig-top"><span class="ig-lbl">Non-branded Spend %</span></div>
+      <div class="ygrid"><div class="yr-lbl-cell">Baseline</div><div class="ygrid-hdr y1">Y1</div><div class="ygrid-hdr y2">Y2</div><div class="ygrid-hdr y3">Y3</div></div>
+      <div class="ygrid">
+        <input class="yr base-inp" id="nb-base" value="75.4%" oninput="recalc()">
+        <input class="yr" id="nb-y1" value="80.0%" oninput="recalc()">
+        <input class="yr" id="nb-y2" value="81.0%" oninput="recalc()">
+        <input class="yr" id="nb-y3" value="82.0%" oninput="recalc()">
+      </div>
+    </div>
+
+    <div class="ig blue">
+      <div class="ig-top"><span class="ig-lbl">ROAS with Pattern</span></div>
+      <div class="ygrid"><div class="yr-lbl-cell">Baseline</div><div class="ygrid-hdr y1">Y1</div><div class="ygrid-hdr y2">Y2</div><div class="ygrid-hdr y3">Y3</div></div>
+      <div class="ygrid">
+        <input class="yr base-inp" id="roas-base" value="4.8" oninput="recalc()">
+        <input class="yr" id="roas-y1" value="5.0" oninput="recalc()">
+        <input class="yr" id="roas-y2" value="5.2" oninput="recalc()">
+        <input class="yr" id="roas-y3" value="5.4" oninput="recalc()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Growth -->
+  <div>
+    <div class="section-label">Growth Assumptions</div>
+
+    <div class="ig purple">
+      <div class="ig-top"><span class="ig-lbl">Brand YoY Growth</span><span class="manual-tag">Manual</span></div>
+      <div class="ygrid"><div class="yr-lbl-cell">Baseline</div><div class="ygrid-hdr y1">Y1</div><div class="ygrid-hdr y2">Y2</div><div class="ygrid-hdr y3">Y3</div></div>
+      <div class="ygrid">
+        <input class="yr base-inp" id="byoy-base" value="10.0%" oninput="syncY('byoy');recalc()">
+        <input class="yr" id="byoy-y1" value="10.0%" oninput="recalc()">
+        <input class="yr" id="byoy-y2" value="10.0%" oninput="recalc()">
+        <input class="yr" id="byoy-y3" value="10.0%" oninput="recalc()">
+      </div>
+    </div>
+
+    <!-- Category picker -->
+    <div class="cat-box">
+      <div class="ig-top" style="margin-bottom:7px">
+        <span class="ig-lbl">Category Growth (unit YoY)</span>
+        <span class="kitchen-tag">Kitchen</span>
+      </div>
+      <div class="cat-list" id="cat-list"></div>
+      <div class="weighted-row">
+        <span class="weighted-lbl">Weighted Avg</span>
+        <span class="weighted-val" id="weighted-cat-val">—</span>
+      </div>
+      <div style="font-size:9.5px;color:#8A9AB5;margin-top:5px">Source: softy_category_growth · unit growth, not revenue YoY</div>
+    </div>
+
+    <div class="ig purple" style="margin-top:6px">
+      <div class="ig-top"><span class="ig-lbl">Category Growth (applied)</span></div>
+      <div class="ygrid"><div class="yr-lbl-cell">Baseline</div><div class="ygrid-hdr y1">Y1</div><div class="ygrid-hdr y2">Y2</div><div class="ygrid-hdr y3">Y3</div></div>
+      <div class="ygrid">
+        <input class="yr base-inp" id="cat-base" value="0.0%" oninput="syncY('cat');recalc()">
+        <input class="yr" id="cat-y1" value="0.0%" oninput="recalc()">
+        <input class="yr" id="cat-y2" value="0.0%" oninput="recalc()">
+        <input class="yr" id="cat-y3" value="0.0%" oninput="recalc()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-card">
+    <div class="summary-lbl">Pattern Uplift — Year 3</div>
+    <div class="summary-val" id="total-delta">—</div>
+    <div class="summary-sub" id="total-delta-pct">vs organic baseline</div>
+  </div>
+
+</div><!-- /panel -->
+
+<!-- ═══ RIGHT ═══ -->
+<div class="right">
+
+  <!-- Table -->
+  <div class="tbl-wrap">
+    <table class="ytbl">
+      <thead>
+        <tr>
+          <th style="min-width:210px">Line Item</th>
+          <th class="r">Baseline</th>
+          <th class="r y1">Year 1</th>
+          <th class="r y2">Year 2</th>
+          <th class="r y3">Year 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="gh"><td colspan="5">Ads</td></tr>
+        <tr>
+          <td class="dim">Non-branded Ad Sales (baseline)</td>
+          <td class="r" id="t-nb-bl">—</td>
+          <td class="r y1c" id="t-nb-y1">—</td>
+          <td class="r y2c" id="t-nb-y2">—</td>
+          <td class="r y3c" id="t-nb-y3">—</td>
+        </tr>
+        <tr>
+          <td class="dim">Ad Sales with Pattern</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-ap-y1">—</td>
+          <td class="r y2c" id="t-ap-y2">—</td>
+          <td class="r y3c" id="t-ap-y3">—</td>
+        </tr>
+        <tr class="sub">
+          <td>Incremental Ads Opportunity</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-ai-y1">—</td>
+          <td class="r y2c" id="t-ai-y2">—</td>
+          <td class="r y3c" id="t-ai-y3">—</td>
+        </tr>
+        <tr class="gh"><td colspan="5">Revenue Projection</td></tr>
+        <tr>
+          <td>Brand Revenue (end of year)</td>
+          <td class="r" id="t-br-bl">—</td>
+          <td class="r y1c" id="t-br-y1">—</td>
+          <td class="r y2c" id="t-br-y2">—</td>
+          <td class="r y3c" id="t-br-y3">—</td>
+        </tr>
+        <tr>
+          <td class="dim" style="padding-left:20px">↳ Buy-Box / ASIN Improvements</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-bb-y1">—</td>
+          <td class="r y2c dim">$0</td>
+          <td class="r y3c dim">$0</td>
+        </tr>
+        <tr>
+          <td class="dim" style="padding-left:20px">↳ Ads Improvement</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-ad-y1">—</td>
+          <td class="r y2c" id="t-ad-y2">—</td>
+          <td class="r y3c" id="t-ad-y3">—</td>
+        </tr>
+        <tr class="pat">
+          <td>Pattern Baseline (end of year)</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-pb-y1">—</td>
+          <td class="r y2c" id="t-pb-y2">—</td>
+          <td class="r y3c" id="t-pb-y3">—</td>
+        </tr>
+        <tr class="brb">
+          <td class="dim" style="padding-left:20px">↳ Brand Baseline (organic)</td>
+          <td class="r" id="t-br-bl2">—</td>
+          <td class="r y1c" id="t-brb-y1">—</td>
+          <td class="r y2c" id="t-brb-y2">—</td>
+          <td class="r y3c" id="t-brb-y3">—</td>
+        </tr>
+        <tr class="gh"><td colspan="5">Uplift vs Organic</td></tr>
+        <tr class="dlt">
+          <td>Delta ($)</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-d-y1">—</td>
+          <td class="r y2c" id="t-d-y2">—</td>
+          <td class="r y3c" id="t-d-y3">—</td>
+        </tr>
+        <tr>
+          <td class="dim">Delta (%)</td>
+          <td class="r dim">—</td>
+          <td class="r y1c" id="t-dp-y1">—</td>
+          <td class="r y2c" id="t-dp-y2">—</td>
+          <td class="r y3c" id="t-dp-y3">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-area">
+    <div class="chart-top">
+      <span class="chart-title">Revenue Comparison</span>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:#C4D3E3;border:1.5px solid #8a9ab5"></div>Brand Baseline</div>
+        <div class="leg"><div class="leg-dot" style="background:#3A55FF"></div>Pattern Baseline</div>
+        <div class="leg"><div class="leg-dot" style="background:rgba(58,85,255,.2);border:1px dashed #3A55FF"></div>Uplift</div>
+      </div>
+    </div>
+    <div class="chart-canvas">
+      <canvas id="revChart"></canvas>
+    </div>
+    <div class="footnote">
+      <strong style="color:#8A9AB5">Formulas:</strong>
+      Brand Rev = Prior × (1+BrandYoY) × (1+CatGrowth) &nbsp;·&nbsp;
+      Pattern Y1 = (Baseline + WF + Ads↑) × (1+Cat) &nbsp;·&nbsp;
+      Pattern Y2/3 = (Prior Pattern + Ads↑) × (1+Cat) &nbsp;·&nbsp;
+      Category growth = unit YoY (softy_category_growth), not revenue YoY &nbsp;·&nbsp;
+      All figures directional estimates · Pattern Intelligence
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+const CATS = [
+  { name:'Pressure Washer Hoses',       growth:-0.0416, share:0.4378, node:'13400401' },
+  { name:'Pressure Washer Pumps',       growth: 0.0496, share:0.1845, node:'13400441' },
+  { name:'Garden Hoses',                growth: 0.1438, share:0.1608, node:'553966'   },
+  { name:'Pressure Washer Accessories', growth: 0.0619, share:0.1590, node:'9425932011'},
+  { name:'Pressure Washer Nozzles',     growth: 0.2219, share:0.0258, node:'13400431' },
+  { name:'Lawn & Garden Sprinklers',    growth: 0.0732, share:0.0188, node:'553974'   },
+  { name:'Pressure Washer Hose Reels',  growth:-0.0158, share:0.0038, node:'13400391' },
+];
+
+function buildCatList(){
+  const list=document.getElementById('cat-list');
+  CATS.forEach((c,i)=>{
+    const gSign=c.growth>=0?'+':'';
+    const gColor=c.growth>=0?'#16a34a':'#dc2626';
+    const div=document.createElement('div');
+    div.className='cat-item'+(i<2?' on':'');
+    div.innerHTML=`
+      <input type="checkbox" id="cc${i}" ${i<2?'checked':''} onchange="onCatChange()">
+      <label for="cc${i}" class="cat-name" style="cursor:pointer">${c.name}</label>
+      <span class="cat-g" style="color:${gColor}">${gSign}${(c.growth*100).toFixed(1)}%</span>
+      <span class="cat-s">${(c.share*100).toFixed(1)}%</span>`;
+    div.addEventListener('click',e=>{
+      if(e.target.tagName!=='INPUT'&&e.target.tagName!=='LABEL'){
+        const cb=div.querySelector('input');cb.checked=!cb.checked;onCatChange();
+      }
+    });
+    list.appendChild(div);
+  });
+}
+
+function onCatChange(){
+  document.querySelectorAll('.cat-item').forEach((el,i)=>{
+    el.classList.toggle('on',el.querySelector('input').checked);
+  });
+  let tw=0,ws=0;
+  CATS.forEach((c,i)=>{const cb=document.getElementById('cc'+i);if(cb?.checked){tw+=c.share;ws+=c.share*c.growth;}});
+  const w=tw>0?ws/tw:0;
+  const sign=w>=0?'+':'';
+  const color=w>=0?'#16a34a':'#dc2626';
+  const el=document.getElementById('weighted-cat-val');
+  el.textContent=sign+(w*100).toFixed(2)+'%';el.style.color=color;
+  const pct=(w*100).toFixed(1)+'%';
+  ['cat-base','cat-y1','cat-y2','cat-y3'].forEach(id=>document.getElementById(id).value=pct);
+  recalc();
+}
+
+const $=id=>document.getElementById(id);
+function pP(id){return parseFloat(($( id)?.value||'0').replace(/[%$,\s]/g,''))/100;}
+function pF(id){return parseFloat(($( id)?.value||'0').replace(/[%$,\s]/g,''))||0;}
+function fmtD(n){
+  if(isNaN(n)||!isFinite(n))return'—';
+  const a=Math.abs(Math.round(n));
+  return(n<0?'(':'')+'$'+a.toLocaleString('en-US')+(n<0?')':'');
+}
+function fmtP(n,sign=true){
+  if(isNaN(n)||!isFinite(n))return'—';
+  return(n<0?'-':(sign?'+':''))+(Math.abs(n)*100).toFixed(1)+'%';
+}
+function set(id,val,pos){
+  const el=$(id);if(!el)return;
+  el.textContent=val;
+  el.className=el.className.replace(/\bpv\b|\bnv\b/g,'').trim();
+  if(pos===true)el.classList.add('pv');
+  if(pos===false)el.classList.add('nv');
+}
+function syncY(k){const v=$(k+'-base').value;[k+'-y1',k+'-y2',k+'-y3'].forEach(id=>$(id).value=v);}
+function onBaseInput(el){$('base-rev').value=el.value.replace(/[^0-9]/g,'')||'0';recalc();}
+function fmtBase(el){const n=parseInt($('base-rev').value)||0;el.value=n.toLocaleString('en-US');}
+
+let chart=null;
+function updateChart(bV,pV){
+  const labels=['Baseline','Year 1','Year 2','Year 3'];
+  const deltas=pV.map((v,i)=>Math.max(0,v-bV[i]));
+  const pBase=pV.map((v,i)=>Math.min(v,bV[i]));
+  if(chart){
+    chart.data.datasets[0].data=bV;
+    chart.data.datasets[1].data=pBase;
+    chart.data.datasets[2].data=deltas;
+    chart.update('none');return;
+  }
+  chart=new Chart($('revChart').getContext('2d'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Brand Baseline',data:bV,backgroundColor:'#C4D3E3',borderColor:'#8a9ab5',borderWidth:1,borderRadius:5,stack:'b'},
+      {label:'Pattern Baseline',data:pBase,backgroundColor:'#3A55FF',borderColor:'#2a45ef',borderWidth:1,borderRadius:0,stack:'p'},
+      {label:'Uplift',data:deltas,backgroundColor:'rgba(58,85,255,.18)',borderColor:'#3A55FF',borderWidth:1,borderDash:[4,3],borderRadius:5,stack:'p'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{
+        backgroundColor:'rgba(13,15,26,.9)',
+        titleFont:{family:"'Wix Madefor Display',sans-serif",size:12,weight:'700'},
+        bodyFont:{family:"'Wix Madefor Display',sans-serif",size:11},
+        padding:10,cornerRadius:8,
+        callbacks:{
+          label:c=>' '+c.dataset.label+': $'+Math.round(c.raw).toLocaleString('en-US'),
+          afterBody:(items)=>{
+            const idx=items[0].dataIndex;if(idx===0)return[];
+            const diff=pBase[idx]+deltas[idx]-bV[idx];
+            const pct=(diff/bV[idx]*100).toFixed(1);
+            return['','Pattern vs Organic: $'+Math.round(diff).toLocaleString('en-US')+' ('+(diff>=0?'+':'')+pct+'%)'];
+          }
+        }
+      }},
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{font:{family:"'Wix Madefor Display',sans-serif",size:12},color:'#8A9AB5'}},
+        y:{grid:{color:'#E2E8F2',lineWidth:1},border:{display:false},ticks:{font:{family:"'Wix Madefor Display',sans-serif",size:11},color:'#8A9AB5',
+            callback:v=>'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v)}}
+      }
+    }
+  });
+}
+
+function recalc(){
+  const C23=parseFloat($('base-rev').value)||0;
+  const lbbRate=parseFloat($('lbb-rate').value)/100||0,lbbSolve=parseInt($('lbb-solve').value)/100;
+  const oosRate=parseFloat($('oos-rate').value)/100||0,oosSolve=parseInt($('oos-solve').value)/100;
+  const supRate=parseFloat($('sup-rate').value)/100||0,supSolve=parseInt($('sup-solve').value)/100;
+  const lbbUp=C23*lbbRate*lbbSolve,oosUp=C23*oosRate*oosSolve,supUp=C23*supRate*supSolve;
+  const seoUp=parseFloat($('seo-value').value)||0;
+  const WF=lbbUp+oosUp+supUp+seoUp;
+
+  $('lbb-pct').textContent=Math.round(lbbSolve*100)+'%';
+  $('oos-pct').textContent=Math.round(oosSolve*100)+'%';
+  $('sup-pct').textContent=Math.round(supSolve*100)+'%';
+  $('lbb-up').textContent='+'+fmtD(lbbUp);
+  $('oos-up').textContent='+'+fmtD(oosUp);
+  $('sup-up').textContent='+'+fmtD(supUp);
+  $('seo-up').textContent='+'+fmtD(seoUp);
+  $('lbb-base').textContent=fmtD(C23*lbbRate)+' at 3P';
+  $('wf-total').textContent=fmtD(WF);
+
+  const tacos_bl=pP('tacos-base'),tacos_y1=pP('tacos-y1'),tacos_y2=pP('tacos-y2'),tacos_y3=pP('tacos-y3');
+  const nb_bl=pP('nb-base'),nb_y1=pP('nb-y1'),nb_y2=pP('nb-y2'),nb_y3=pP('nb-y3');
+  const roas_bl=pF('roas-base'),roas_y1=pF('roas-y1'),roas_y2=pF('roas-y2'),roas_y3=pF('roas-y3');
+  const byoy_y1=pP('byoy-y1'),byoy_y2=pP('byoy-y2'),byoy_y3=pP('byoy-y3');
+  const cat_y1=pP('cat-y1'),cat_y2=pP('cat-y2'),cat_y3=pP('cat-y3');
+
+  const D23=C23*(1+byoy_y1)*(1+cat_y1);
+  const E23=D23*(1+byoy_y2)*(1+cat_y2);
+  const F23=E23*(1+byoy_y3)*(1+cat_y3);
+  const D13=C23*tacos_bl*nb_bl*roas_bl;
+  const E13=D23*tacos_bl*nb_bl*roas_bl;
+  const F13=E23*tacos_bl*nb_bl*roas_bl;
+  const D14=(C23+WF)*tacos_y1*nb_y1*roas_y1;
+  const D15=D14-D13;
+  const D26=(C23+WF+D15)*(1+cat_y1);
+  const E14=D26*tacos_y2*nb_y2*roas_y2;
+  const E15=E14-E13;
+  const E26=(D26+E15)*(1+cat_y2);
+  const F14=E26*tacos_y3*nb_y3*roas_y3;
+  const F15=F14-F13;
+  const F26=(E26+F15)*(1+cat_y3);
+  const d1=D26-D23,d2=E26-E23,d3=F26-F23;
+
+  set('t-nb-bl',fmtD(D13));
+  set('t-nb-y1',fmtD(D13));set('t-nb-y2',fmtD(E13));set('t-nb-y3',fmtD(F13));
+  set('t-ap-y1',fmtD(D14));set('t-ap-y2',fmtD(E14));set('t-ap-y3',fmtD(F14));
+  set('t-ai-y1',fmtD(D15),D15>=0);set('t-ai-y2',fmtD(E15),E15>=0);set('t-ai-y3',fmtD(F15),F15>=0);
+  set('t-br-bl',fmtD(C23));
+  set('t-br-y1',fmtD(D23));set('t-br-y2',fmtD(E23));set('t-br-y3',fmtD(F23));
+  set('t-bb-y1',fmtD(WF));
+  set('t-ad-y1',fmtD(D15));set('t-ad-y2',fmtD(E15));set('t-ad-y3',fmtD(F15));
+  set('t-pb-y1',fmtD(D26));set('t-pb-y2',fmtD(E26));set('t-pb-y3',fmtD(F26));
+  set('t-br-bl2',fmtD(C23));
+  set('t-brb-y1',fmtD(D23));set('t-brb-y2',fmtD(E23));set('t-brb-y3',fmtD(F23));
+  set('t-d-y1',fmtD(d1),d1>=0);set('t-d-y2',fmtD(d2),d2>=0);set('t-d-y3',fmtD(d3),d3>=0);
+  set('t-dp-y1',fmtP(d1/(D23||1)),d1>=0);set('t-dp-y2',fmtP(d2/(E23||1)),d2>=0);set('t-dp-y3',fmtP(d3/(F23||1)),d3>=0);
+  set('total-delta',fmtD(d3),d3>=0);
+  set('total-delta-pct',fmtP(d3/(F23||1))+' uplift vs organic — Year 3');
+  updateChart([C23,D23,E23,F23],[C23,D26,E26,F26]);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{buildCatList();onCatChange();});
+</script>
+</body>
+</html>
