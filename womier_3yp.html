@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Womier — 3 Year Growth Plan · Pattern</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&family=STIX+Two+Text:ital,wght@1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Wix Madefor Display',Inter,system-ui,sans-serif; background:#EBF0F5; color:#090A0F; font-size:14px; }
+
+.header { background:#fff; border-bottom:1px solid #C4D3E3; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 3px rgba(7,7,8,.06); }
+.header-title { font-size:18px; font-weight:700; letter-spacing:-0.3px; }
+.header-title em { font-style:italic; font-family:'STIX Two Text',serif; color:#009BFF; font-weight:400; }
+.header-sub { font-size:12px; color:#6b7a96; margin-top:3px; }
+.logo-wrap svg { width:100px; height:auto; }
+.accent-bar { height:3px; background:linear-gradient(90deg,#0096FA,#770BFF); }
+
+.sec-title { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#6b7a96; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+.sec-title::after { content:''; flex:1; height:1px; background:#C4D3E3; }
+.kb { background:#dcfce7; color:#16a34a; font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; flex-shrink:0; }
+
+.body-wrap { display:flex; height:calc(100vh - 52px); overflow:hidden; }
+
+/* LEFT */
+.controls { width:326px; min-width:326px; background:#fff; border-right:1px solid #C4D3E3; padding:14px 14px 20px; overflow-y:auto; }
+.ctrl-section { margin-bottom:16px; }
+.ctrl-title { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#6b7a96; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.ctrl-title::after { content:''; flex:1; height:1px; background:#C4D3E3; }
+
+.baseline-row { background:#EBF0F5; border:1.5px solid #3A55FF; border-radius:10px; padding:10px 14px; margin-bottom:10px; }
+.baseline-row label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#3A55FF; font-weight:600; display:block; margin-bottom:4px; }
+.baseline-row input { width:100%; background:transparent; border:none; font-size:18px; font-weight:700; color:#090A0F; font-family:'Wix Madefor Display',sans-serif; outline:none; }
+
+/* levers */
+.lever { border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+.lever.c-lbb { background:#f5f0ff; border:1.5px solid rgba(119,11,255,.3); }
+.lever.c-oos { background:#EBF0F5; border:1px solid #C4D3E3; }
+.lever.c-sup { background:#EBF0F5; border:1px solid #C4D3E3; }
+.lever.c-seo { background:#f0f8ff; border:1px solid rgba(0,155,255,.25); }
+.lever-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.lever-name { font-size:13px; font-weight:700; }
+.rate-wrap { display:flex; align-items:center; gap:4px; font-size:11px; color:#6b7a96; }
+.rate-inp { width:52px; padding:3px 6px; font-size:12px; background:#fff; border:1px solid #C4D3E3; border-radius:5px; color:#090A0F; font-family:'Wix Madefor Display',sans-serif; outline:none; text-align:right; }
+.rate-inp:focus { border-color:#3A55FF; }
+.solve-row { display:flex; align-items:center; gap:8px; margin-bottom:2px; }
+.solve-lbl { font-size:10px; color:#6b7a96; font-weight:700; text-transform:uppercase; letter-spacing:.8px; min-width:40px; }
+.solve-pct { font-size:13px; font-weight:700; min-width:36px; text-align:right; }
+input[type=range] { flex:1; height:4px; cursor:pointer; }
+input[type=range].r-purple { accent-color:#770BFF; }
+input[type=range].r-blue   { accent-color:#3A55FF; }
+input[type=range].r-bright { accent-color:#009BFF; }
+.lever-up   { font-size:14px; font-weight:700; text-align:right; margin-top:4px; }
+.lever-base { font-size:11px; color:#6b7a96; text-align:right; margin-top:1px; }
+.seo-inp { width:100%; margin-top:6px; background:#fff; border:1px solid #C4D3E3; border-radius:6px; padding:6px 10px; font-size:15px; font-weight:700; color:#009BFF; font-family:'Wix Madefor Display',sans-serif; outline:none; }
+.seo-inp:focus { border-color:#009BFF; }
+
+.wf-total-box { background:linear-gradient(135deg,rgba(0,150,250,.1),rgba(119,11,255,.1)); border:1.5px solid rgba(58,85,255,.25); border-radius:10px; padding:9px 14px; margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
+.wf-total-lbl { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:#6b7a96; }
+.wf-total-val { font-size:16px; font-weight:800; color:#3A55FF; }
+
+.divider { height:1px; background:#C4D3E3; margin:14px 0; }
+
+/* year grids */
+.input-group { border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+.input-group.c-ads { background:#f0f8ff; border:1px solid rgba(0,155,255,.25); }
+.input-group.c-brand { background:#f5f0ff; border:1px solid rgba(119,11,255,.2); }
+.ig-label { font-size:11px; font-weight:600; color:#6b7a96; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; gap:6px; }
+.year-grid { display:grid; grid-template-columns:68px 1fr 1fr 1fr; gap:5px; align-items:center; margin-bottom:3px; }
+.yr-lbl { font-size:9px; color:#6b7a96; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+.yr-hdr { font-size:9px; font-weight:700; text-align:center; padding:2px; border-radius:4px; }
+.yr-hdr.h1 { color:#1e3a8a; background:#dbeafe; }
+.yr-hdr.h2 { color:#4c1d95; background:#ede9fe; }
+.yr-hdr.h3 { color:#064e3b; background:#d1fae5; }
+.yr-inp { width:100%; padding:4px 5px; font-size:12px; font-weight:600; border:1.5px solid #C4D3E3; border-radius:6px; text-align:center; background:#fff; color:#090A0F; font-family:'Wix Madefor Display',sans-serif; outline:none; }
+.yr-inp:focus { border-color:#3A55FF; }
+.yr-inp.base { color:#3A55FF; border-color:rgba(58,85,255,.4); background:#EBF0F5; }
+
+/* category picker */
+.cat-picker { background:#f5f0ff; border:1px solid rgba(119,11,255,.2); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+.cat-picker-title { font-size:11px; font-weight:600; color:#6b7a96; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+.cat-list { display:flex; flex-direction:column; gap:5px; max-height:200px; overflow-y:auto; }
+.cat-item { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:7px; cursor:pointer; border:1.5px solid transparent; transition:all .15s; background:#fff; }
+.cat-item:hover { border-color:rgba(119,11,255,.3); background:#ede9fe; }
+.cat-item.selected { border-color:#770BFF; background:#ede9fe; }
+.cat-item input[type=checkbox] { accent-color:#770BFF; cursor:pointer; flex-shrink:0; }
+.cat-name { font-size:12px; font-weight:600; flex:1; }
+.cat-growth { font-size:11px; font-weight:700; min-width:46px; text-align:right; }
+.cat-share { font-size:10px; color:#6b7a96; min-width:38px; text-align:right; }
+.weighted-result { margin-top:8px; padding:7px 10px; background:rgba(119,11,255,.08); border-radius:7px; display:flex; justify-content:space-between; align-items:center; font-size:12px; }
+.weighted-result .wr-lbl { color:#6b7a96; font-weight:600; }
+.weighted-result .wr-val { font-size:15px; font-weight:800; color:#770BFF; }
+.cat-note { font-size:10px; color:#6b7a96; margin-top:5px; font-style:italic; }
+
+.total-box { background:linear-gradient(135deg,#0096FA,#3A55FF 50%,#770BFF); border-radius:12px; padding:14px 16px; margin-top:14px; box-shadow:0 2px 3px rgba(7,7,8,.15),0 14px 14px rgba(7,7,8,.1); }
+.t-lbl { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.8); }
+.t-val { font-size:22px; font-weight:800; letter-spacing:-.5px; color:#fff; margin-top:4px; }
+.t-sub { font-size:11px; color:rgba(255,255,255,.7); margin-top:3px; }
+
+/* RIGHT */
+.right-area { flex:1; display:flex; flex-direction:column; overflow:hidden; background:#EBF0F5; }
+.table-wrap { padding:16px 18px 0; flex-shrink:0; }
+
+.ytable { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(7,7,8,.08); font-size:12.5px; }
+.ytable thead th { background:#090A0F; color:#fff; padding:8px 11px; font-size:10px; font-weight:600; text-align:left; white-space:nowrap; }
+.ytable thead th.num { text-align:right; }
+.ytable thead th.y1 { background:#1e3a8a; }
+.ytable thead th.y2 { background:#4c1d95; }
+.ytable thead th.y3 { background:#064e3b; }
+.ytable tbody tr { border-bottom:1px solid #EBF0F5; }
+.ytable tbody tr:hover td { background:#fafbff; }
+.ytable td { padding:6px 11px; vertical-align:middle; }
+.ytable td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.ytable td.y1c { background:rgba(219,234,254,.25); }
+.ytable td.y2c { background:rgba(237,233,254,.25); }
+.ytable td.y3c { background:rgba(209,250,229,.25); }
+.ytable tr.gh td { background:#F0F2F7; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#6b7a96; padding:5px 11px; border-bottom:2px solid #C4D3E3; }
+.ytable tr.sub td { font-weight:600; border-top:1.5px solid #C4D3E3; background:rgba(219,234,254,.4); }
+.ytable tr.pat td { background:linear-gradient(90deg,rgba(219,234,254,.7),rgba(237,233,254,.5),rgba(209,250,229,.7)); font-weight:700; border-top:2px solid #C4D3E3; }
+.ytable tr.dlt td { border-top:2px solid rgba(58,85,255,.3); font-weight:700; font-size:13px; }
+.pv { color:#16a34a; } .nv { color:#dc2626; }
+
+.chart-wrap { flex:1; padding:10px 18px 6px; display:flex; flex-direction:column; min-height:0; }
+.chart-legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
+.cleg { display:flex; align-items:center; gap:6px; font-size:12px; }
+.cleg-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+.chart-canvas-wrap { flex:1; position:relative; min-height:0; }
+.data-note { font-size:9.5px; color:#b0bdd0; margin-top:6px; border-top:1px solid #EBF0F5; padding-top:6px; line-height:1.7; }
+.data-note strong { color:#8a9ab5; font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Womier — <em>3 Year</em> Growth Plan</div>
+    <div class="header-sub">Pattern estimates · Kitchen data Mar 17, 2026 · Video Games</div>
+  </div>
+  <div class="logo-wrap">
+    <svg viewBox="0 0 675 135.7" xmlns="http://www.w3.org/2000/svg">
+      <style>.lb0{fill:#009BFF}.lb1{fill:#231F20}</style>
+      <g>
+        <path class="lb0" d="M81.55,0.99L0.99,81.55c-1.32,1.32-1.32,3.47,0,4.8l19.84,19.84c1.32,1.32,3.47,1.32,4.8,0l80.56-80.56c1.32-1.32,1.32-3.47,0-4.8L86.35,0.99C85.02-0.33,82.88-0.33,81.55,0.99z"/>
+        <path class="lb0" d="M114.73,34.17L67.37,81.54c-1.32,1.32-1.32,3.47,0,4.8l19.84,19.84c1.32,1.32,3.47,1.32,4.8,0l47.36-47.36c1.32-1.32,1.32-3.47,0-4.8l-19.84-19.84C118.2,32.85,116.05,32.85,114.73,34.17z"/>
+        <path class="lb1" d="M254.36,64.21c0,24.35-18.47,42.98-40.69,42.98c-12.74,0-22.39-5.23-28.6-13.73v40.25c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V25.35c0-1.1,0.89-2,2-2h13.65c1.1,0,2,0.89,2,2v9.77c6.21-8.66,15.85-13.89,28.6-13.89C235.9,21.23,254.36,40.02,254.36,64.21z M236.71,64.21c0-15.2-11.11-26.15-25.82-26.15c-14.71,0-25.82,10.95-25.82,26.15c0,15.2,11.11,26.15,25.82,26.15C225.6,90.35,236.71,79.4,236.71,64.21z"/>
+        <path class="lb1" d="M347.84,25.35v77.71c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2v-9.77c-6.21,8.66-15.85,13.89-28.6,13.89c-22.22,0-40.69-18.79-40.69-42.98c0-24.35,18.46-42.98,40.69-42.98c12.74,0,22.39,5.23,28.6,13.73v-9.6c0-1.1,0.89-2,2-2h13.65C346.95,23.35,347.84,24.25,347.84,25.35z M330.19,64.21c0-15.2-11.11-26.15-25.82-26.15s-25.82,10.95-25.82,26.15c0,15.2,11.11,26.15,25.82,26.15S330.19,79.4,330.19,64.21z"/>
+        <path class="lb1" d="M493.81,91.01c9.04,0,15.99-3.75,20.09-8.81c0.61-0.75,1.69-0.91,2.52-0.42l11.12,6.5c1.02,0.59,1.33,1.95,0.62,2.89c-7.59,10.04-19.37,16.03-34.51,16.03c-26.96,0-44.45-18.46-44.45-42.98c0-24.18,17.48-42.98,43.14-42.98c24.35,0,41.02,19.61,41.02,43.14c0,2.45-0.33,5.07-0.65,7.35h-65.04C470.44,84.47,480.74,91.01,493.81,91.01z M515.54,57.34c-2.45-14.05-12.75-20.1-23.37-20.1c-13.24,0-22.22,7.84-24.67,20.1H515.54z"/>
+        <path class="lb1" d="M675,54.89v48.17c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V56.69c0-12.42-7.19-18.96-18.3-18.96c-11.6,0-20.75,6.86-20.75,23.53v41.8c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V25.35c0-1.1,0.89-2,2-2h13.65c1.1,0,2,0.89,2,2v8.46c5.39-8.5,14.22-12.58,25.33-12.58C661.93,21.23,675,33.65,675,54.89z"/>
+        <path class="lb1" d="M583.58,21.88c-10.29,0-20.26,4.09-25.16,15.2V25.35c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v77.71c0,1.1,0.89,2,2,2h13.65c1.1,0,2-0.89,2-2V63.88c0-18.3,13.28-22.88,25.16-22.88h6.15c1.1,0,2-0.89,2-2V23.88c0-1.1-0.89-2-2-2H583.58z"/>
+        <path class="lb1" d="M397.4,40.35c1.1,0,2-0.89,2-2v-13c0-1.1-0.89-2-2-2h-21V2c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v78.96c0,16.77,8.09,24.83,24.97,24.83l13.68-0.01c1.1,0,2-0.9,2-2V91.42c0-1.1-0.9-2-2-2c-2.84,0-8.3-0.01-10.5-0.01c-8.05,0-10.5-2.09-10.5-9.85V40.35H397.4z"/>
+        <path class="lb1" d="M445.33,40.35c1.1,0,2-0.89,2-2v-13c0-1.1-0.89-2-2-2h-21V2c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v78.96c0,16.77,8.09,24.83,24.97,24.83l13.68-0.01c1.1,0,1.99-0.9,1.99-2V91.42c0-1.1-0.9-2-2-2c-2.84,0-8.3-0.01-10.5-0.01c-8.05,0-10.5-2.09-10.5-9.85V40.35H445.33z"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<div class="accent-bar"></div>
+
+<div class="body-wrap">
+<div class="controls">
+
+  <!-- BASELINE -->
+  <div class="ctrl-section">
+    <div class="ctrl-title">Baseline</div>
+    <div class="baseline-row">
+      <label>Top Seller Revenue — T12M</label>
+      <input type="text" id="base-rev-display" value="5,278,835" oninput="onBaseInput(this)" onblur="fmtBase(this)">
+      <input type="hidden" id="base-rev" value="5278835">
+    </div>
+  </div>
+
+  <!-- WATERFALL -->
+  <div class="ctrl-section">
+    <div class="ctrl-title">Year 1 Growth Waterfall <span class="kb">Kitchen</span></div>
+
+    <div class="sec-title" style="margin-bottom:8px">3P Recapture</div>
+    <div class="lever c-lbb">
+      <div class="lever-hdr">
+        <span class="lever-name" style="color:#770BFF">Lost Buybox</span>
+        <span class="rate-wrap">Rate: <input class="rate-inp" id="lbb-rate" type="number" value="3.74" step="0.01" min="0" max="100" oninput="recalc()">%</span>
+      </div>
+      <div class="solve-row">
+        <span class="solve-lbl">Solve</span>
+        <input type="range" class="r-purple" id="lbb-solve" min="0" max="100" value="0" oninput="recalc()">
+        <span class="solve-pct" id="lbb-pct" style="color:#770BFF">0%</span>
+      </div>
+      <div class="lever-up" id="lbb-up" style="color:#770BFF">+$0</div>
+      <div class="lever-base" id="lbb-base"></div>
+    </div>
+
+    <div class="sec-title" style="margin:8px 0">Listing Health</div>
+    <div class="lever c-oos">
+      <div class="lever-hdr">
+        <span class="lever-name">Out of Stock</span>
+        <span class="rate-wrap">Rate: <input class="rate-inp" id="oos-rate" type="number" value="4.75" step="0.01" min="0" max="100" oninput="recalc()">%</span>
+      </div>
+      <div class="solve-row">
+        <span class="solve-lbl">Solve</span>
+        <input type="range" class="r-blue" id="oos-solve" min="0" max="100" value="50" oninput="recalc()">
+        <span class="solve-pct" id="oos-pct" style="color:#3A55FF">50%</span>
+      </div>
+      <div class="lever-up" id="oos-up" style="color:#3A55FF">—</div>
+      <div class="lever-base" id="oos-base"></div>
+    </div>
+    <div class="lever c-sup">
+      <div class="lever-hdr">
+        <span class="lever-name">Suppression</span>
+        <span class="rate-wrap">Rate: <input class="rate-inp" id="sup-rate" type="number" value="1.24" step="0.01" min="0" max="100" oninput="recalc()">%</span>
+      </div>
+      <div class="solve-row">
+        <span class="solve-lbl">Solve</span>
+        <input type="range" class="r-blue" id="sup-solve" min="0" max="100" value="50" oninput="recalc()">
+        <span class="solve-pct" id="sup-pct" style="color:#3A55FF">50%</span>
+      </div>
+      <div class="lever-up" id="sup-up" style="color:#3A55FF">—</div>
+      <div class="lever-base" id="sup-base"></div>
+    </div>
+
+    <div class="sec-title" style="margin:8px 0">SEO / Content</div>
+    <div class="lever c-seo">
+      <div class="lever-name" style="color:#009BFF;font-size:12px;margin-bottom:2px">SEO / Content Lift ($)</div>
+      <input class="seo-inp" type="number" id="seo-value" value="52788" oninput="recalc()">
+      <div class="lever-up" id="seo-up" style="color:#009BFF;margin-top:6px">—</div>
+    </div>
+
+    <div class="wf-total-box">
+      <span class="wf-total-lbl">Total Y1 Waterfall</span>
+      <span class="wf-total-val" id="wf-total">—</span>
+    </div>
+    <div style="font-size:10px;color:#6b7a96;margin-top:5px;font-style:italic">Y2 &amp; Y3 carry $0 from waterfall (per Excel model)</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ADS -->
+  <div class="ctrl-section">
+    <div class="ctrl-title">Ads Assumptions</div>
+    <div class="input-group c-ads">
+      <div class="ig-label">TACOS with Pattern <span style="font-size:9px;color:#009BFF">Y1/2/3 = Baseline default</span></div>
+      <div class="year-grid"><div class="yr-lbl">Baseline</div><div class="yr-hdr h1">Y1</div><div class="yr-hdr h2">Y2</div><div class="yr-hdr h3">Y3</div></div>
+      <div class="year-grid">
+        <input class="yr-inp base" id="tacos-base" value="18.3%" oninput="syncY('tacos');recalc()">
+        <input class="yr-inp" id="tacos-y1" value="18.3%" oninput="recalc()">
+        <input class="yr-inp" id="tacos-y2" value="18.3%" oninput="recalc()">
+        <input class="yr-inp" id="tacos-y3" value="18.3%" oninput="recalc()">
+      </div>
+    </div>
+    <div class="input-group c-ads">
+      <div class="ig-label">Non-branded Spend % <span style="font-size:9px;color:#6b7a96">+5/7/9pp defaults</span></div>
+      <div class="year-grid"><div class="yr-lbl">Baseline</div><div class="yr-hdr h1">Y1</div><div class="yr-hdr h2">Y2</div><div class="yr-hdr h3">Y3</div></div>
+      <div class="year-grid">
+        <input class="yr-inp base" id="nb-base" value="75.4%" oninput="recalc()">
+        <input class="yr-inp" id="nb-y1" value="80.0%" oninput="recalc()">
+        <input class="yr-inp" id="nb-y2" value="81.0%" oninput="recalc()">
+        <input class="yr-inp" id="nb-y3" value="82.0%" oninput="recalc()">
+      </div>
+    </div>
+    <div class="input-group c-ads">
+      <div class="ig-label">ROAS with Pattern <span style="font-size:9px;color:#6b7a96">+0.2/yr default</span></div>
+      <div class="year-grid"><div class="yr-lbl">Baseline</div><div class="yr-hdr h1">Y1</div><div class="yr-hdr h2">Y2</div><div class="yr-hdr h3">Y3</div></div>
+      <div class="year-grid">
+        <input class="yr-inp base" id="roas-base" value="4.8" oninput="recalc()">
+        <input class="yr-inp" id="roas-y1" value="5.4" oninput="recalc()">
+        <input class="yr-inp" id="roas-y2" value="5.6" oninput="recalc()">
+        <input class="yr-inp" id="roas-y3" value="5.8" oninput="recalc()">
+      </div>
+    </div>
+  </div>
+
+  <!-- GROWTH -->
+  <div class="ctrl-section">
+    <div class="ctrl-title">Growth Assumptions</div>
+    <div class="input-group c-brand">
+      <div class="ig-label">Brand YoY Growth <span style="font-size:9px;color:#6b7a96">Y1/2/3 = Baseline default</span></div>
+      <div class="year-grid"><div class="yr-lbl">Baseline</div><div class="yr-hdr h1">Y1</div><div class="yr-hdr h2">Y2</div><div class="yr-hdr h3">Y3</div></div>
+      <div class="year-grid">
+        <input class="yr-inp base" id="byoy-base" value="10.0%" oninput="syncY('byoy');recalc()">
+        <input class="yr-inp" id="byoy-y1" value="10.0%" oninput="recalc()">
+        <input class="yr-inp" id="byoy-y2" value="10.0%" oninput="recalc()">
+        <input class="yr-inp" id="byoy-y3" value="10.0%" oninput="recalc()">
+      </div>
+    </div>
+
+    <!-- CATEGORY PICKER -->
+    <div class="cat-picker">
+      <div class="cat-picker-title">
+        Weighted Category Growth <span class="kb">Kitchen · Womier</span>
+      </div>
+      <div class="cat-list" id="cat-list">
+        <!-- rendered by JS -->
+      </div>
+      <div class="weighted-result">
+        <span class="wr-lbl">Weighted Growth</span>
+        <span class="wr-val" id="weighted-cat-val">—</span>
+      </div>
+      <div class="cat-note">Select categories to include in weighted average. Revenue share is used as weight.</div>
+    </div>
+
+    <!-- category growth applied per year -->
+    <div class="input-group c-brand" style="margin-top:0">
+      <div class="ig-label">Category Growth (applied) <span style="font-size:9px;color:#6b7a96">Y1/2/3 = weighted default</span></div>
+      <div class="year-grid"><div class="yr-lbl">Baseline</div><div class="yr-hdr h1">Y1</div><div class="yr-hdr h2">Y2</div><div class="yr-hdr h3">Y3</div></div>
+      <div class="year-grid">
+        <input class="yr-inp base" id="cat-base" value="-4.2%" oninput="syncY('cat');recalc()">
+        <input class="yr-inp" id="cat-y1" value="-4.2%" oninput="recalc()">
+        <input class="yr-inp" id="cat-y2" value="-4.2%" oninput="recalc()">
+        <input class="yr-inp" id="cat-y3" value="-4.2%" oninput="recalc()">
+      </div>
+    </div>
+  </div>
+
+  <div class="total-box">
+    <div class="t-lbl">Pattern Uplift — Year 3</div>
+    <div class="t-val" id="total-delta">—</div>
+    <div class="t-sub" id="total-delta-pct">vs organic baseline</div>
+  </div>
+
+</div><!-- /controls -->
+
+<!-- RIGHT -->
+<div class="right-area">
+  <div class="table-wrap">
+    <table class="ytable">
+      <thead>
+        <tr>
+          <th style="min-width:220px">Line Item</th>
+          <th class="num">Baseline</th>
+          <th class="num y1">Year 1</th>
+          <th class="num y2">Year 2</th>
+          <th class="num y3">Year 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="gh"><td colspan="5">Ads Assumptions</td></tr>
+        <tr>
+          <td style="color:#6b7a96;font-size:12px">Non-branded Ad Sales Baseline</td>
+          <td class="num" id="t-nb-bl">—</td>
+          <td class="num y1c" id="t-nb-y1">—</td>
+          <td class="num y2c" id="t-nb-y2">—</td>
+          <td class="num y3c" id="t-nb-y3">—</td>
+        </tr>
+        <tr>
+          <td style="color:#6b7a96;font-size:12px">Ad Sales with Pattern</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-ap-y1">—</td>
+          <td class="num y2c" id="t-ap-y2">—</td>
+          <td class="num y3c" id="t-ap-y3">—</td>
+        </tr>
+        <tr class="sub">
+          <td>Incremental Ads Opportunity</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-ai-y1">—</td>
+          <td class="num y2c" id="t-ai-y2">—</td>
+          <td class="num y3c" id="t-ai-y3">—</td>
+        </tr>
+        <tr class="gh"><td colspan="5">3-Year Revenue Projection</td></tr>
+        <tr>
+          <td>Brand Revenue (end of year)</td>
+          <td class="num" id="t-br-bl">—</td>
+          <td class="num y1c" id="t-br-y1">—</td>
+          <td class="num y2c" id="t-br-y2">—</td>
+          <td class="num y3c" id="t-br-y3">—</td>
+        </tr>
+        <tr>
+          <td style="color:#6b7a96;font-size:12px;padding-left:20px">↳ Buy-Box / ASIN Improvements (D24)</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-bb-y1">—</td>
+          <td class="num y2c">$0</td>
+          <td class="num y3c">$0</td>
+        </tr>
+        <tr>
+          <td style="color:#6b7a96;font-size:12px;padding-left:20px">↳ Ads Improvement (D25)</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-ad-y1">—</td>
+          <td class="num y2c" id="t-ad-y2">—</td>
+          <td class="num y3c" id="t-ad-y3">—</td>
+        </tr>
+        <tr class="pat">
+          <td>Pattern Baseline (end of year)</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-pb-y1">—</td>
+          <td class="num y2c" id="t-pb-y2">—</td>
+          <td class="num y3c" id="t-pb-y3">—</td>
+        </tr>
+        <tr class="gh"><td colspan="5">Uplift vs Organic</td></tr>
+        <tr class="dlt">
+          <td>Delta ($)</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-d-y1">—</td>
+          <td class="num y2c" id="t-d-y2">—</td>
+          <td class="num y3c" id="t-d-y3">—</td>
+        </tr>
+        <tr>
+          <td style="color:#6b7a96">Delta (%)</td>
+          <td class="num" style="color:#6b7a96">—</td>
+          <td class="num y1c" id="t-dp-y1">—</td>
+          <td class="num y2c" id="t-dp-y2">—</td>
+          <td class="num y3c" id="t-dp-y3">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="sec-title" style="margin-bottom:8px">Revenue Comparison — Brand vs Pattern Baseline</div>
+    <div class="chart-legend">
+      <div class="cleg"><div class="cleg-dot" style="background:#C4D3E3;border:1px solid #9aaec4"></div>Brand Revenue (organic)</div>
+      <div class="cleg"><div class="cleg-dot" style="background:#3A55FF"></div>Pattern Baseline</div>
+      <div class="cleg"><div class="cleg-dot" style="background:rgba(58,85,255,.22);border:1px dashed #3A55FF"></div>Uplift (Delta)</div>
+    </div>
+    <div class="chart-canvas-wrap">
+      <canvas id="revChart"></canvas>
+    </div>
+    <div class="data-note" id="formula-note">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;font-size:9.5px;line-height:1.75;color:#b0bdd0">
+        <div><strong>Non-branded Ad Sales Baseline</strong> = Baseline Rev × TACOS_base × NB Spend_base × ROAS_base</div>
+        <div><strong>Ad Sales with Pattern (Y1)</strong> = (Baseline Rev + Waterfall) × TACOS_Y1 × NB Spend_Y1 × ROAS_Y1</div>
+        <div><strong>Ad Sales with Pattern (Y2)</strong> = Pattern Baseline End Y1 × TACOS_Y2 × NB Spend_Y2 × ROAS_Y2</div>
+        <div><strong>Ad Sales with Pattern (Y3)</strong> = Pattern Baseline End Y2 × TACOS_Y3 × NB Spend_Y3 × ROAS_Y3</div>
+        <div><strong>Ads Improvement</strong> = Ad Sales with Pattern − Non-branded Ad Sales Baseline</div>
+        <div><strong>Brand Revenue (end of year)</strong> = Prior Year Brand Rev × (1 + Brand YoY) × (1 + Cat Growth)</div>
+        <div><strong>Pattern Baseline End Y1</strong> = (Baseline Rev + Waterfall + Ads Improvement Y1) × (1 + Cat Growth Y1)</div>
+        <div><strong>Pattern Baseline End Y2/Y3</strong> = (Prior Pattern Baseline + Ads Improvement) × (1 + Cat Growth)</div>
+      </div>
+      <div style="margin-top:6px;font-size:10px;color:#9aaec4;font-style:italic">All figures are directional estimates — not actuals · Pattern Intelligence</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ── Category data from Kitchen (presales-intel MCP) ──────────────
+const CATS = [
+  { name:'PC Gaming Keyboards', growth: 0.0209, share:0.6673, node:'402051011'   },
+  { name:'Keycaps',             growth: 0.0000, share:0.2163, node:'36818458011' },
+  { name:'Computer Keyboards',  growth: 0.0357, share:0.0746, node:'12879431'    },
+  { name:'Mac Gaming Keyboards',growth:-0.4883, share:0.0047, node:'405591011'   },
+  { name:'USB Cables',          growth: 0.1524, share:0.0042, node:'464394'      },
+  { name:'PC Gaming Mice',      growth:-0.0051, share:0.0031, node:'402052011'   },
+  { name:'Mouse Pads',          growth: 0.1532, share:0.0011, node:'705323011'   },
+];
+
+// Build category list UI
+function buildCatList() {
+  const list = document.getElementById('cat-list');
+  CATS.forEach((c,i) => {
+    const gSign  = c.growth >= 0 ? '+' : '';
+    const gColor = c.growth >= 0 ? '#16a34a' : '#dc2626';
+    const div = document.createElement('div');
+    div.className = 'cat-item' + (i < 2 ? ' selected' : '');
+    div.innerHTML = `
+      <input type="checkbox" id="cat-cb-${i}" ${i < 2 ? 'checked' : ''} onchange="onCatChange()">
+      <label for="cat-cb-${i}" class="cat-name" style="cursor:pointer">${c.name}</label>
+      <span class="cat-growth" style="color:${gColor}">${gSign}${(c.growth*100).toFixed(1)}%</span>
+      <span class="cat-share">${(c.share*100).toFixed(1)}% rev</span>
+    `;
+    div.addEventListener('click', e => {
+      if(e.target.tagName !== 'INPUT') {
+        const cb = div.querySelector('input');
+        cb.checked = !cb.checked;
+        onCatChange();
+      }
+    });
+    list.appendChild(div);
+  });
+}
+
+function onCatChange() {
+  // update selected styling
+  document.querySelectorAll('.cat-item').forEach((el,i) => {
+    const cb = el.querySelector('input');
+    el.classList.toggle('selected', cb.checked);
+  });
+  // compute weighted average
+  let totalWeight = 0, weightedSum = 0;
+  CATS.forEach((c,i) => {
+    const cb = document.getElementById('cat-cb-'+i);
+    if(cb?.checked) { totalWeight += c.share; weightedSum += c.share * c.growth; }
+  });
+  const weighted = totalWeight > 0 ? weightedSum / totalWeight : 0;
+  const sign = weighted >= 0 ? '+' : '';
+  const color = weighted >= 0 ? '#16a34a' : '#dc2626';
+  document.getElementById('weighted-cat-val').textContent = sign + (weighted*100).toFixed(2) + '%';
+  document.getElementById('weighted-cat-val').style.color = color;
+  // push weighted value into all cat year inputs
+  const pct = (weighted*100).toFixed(1) + '%';
+  ['cat-base','cat-y1','cat-y2','cat-y3'].forEach(id => {
+    document.getElementById(id).value = pct;
+  });
+  recalc();
+}
+
+// ── helpers ──────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+function pP(id) { return parseFloat(($( id)?.value||'0').replace(/[%$,\s]/g,''))/100; }
+function pF(id) { return parseFloat(($( id)?.value||'0').replace(/[%$,\s]/g,''))||0; }
+function fmt$(n) {
+  if(isNaN(n)||!isFinite(n)) return '—';
+  const a = Math.abs(Math.round(n));
+  return (n<0?'(':'')+'\$'+a.toLocaleString('en-US')+(n<0?')':'');
+}
+function fmtPct(n, sign=true) {
+  if(isNaN(n)||!isFinite(n)) return '—';
+  const s=(Math.abs(n)*100).toFixed(1)+'%';
+  return (n<0?'-':(sign?'+':''))+s;
+}
+function set(id,val,pos) {
+  const el=$(id); if(!el) return;
+  el.textContent=val;
+  el.className=el.className.replace(/\bpv\b|\bnv\b/g,'').trim();
+  if(pos===true)  el.classList.add('pv');
+  if(pos===false) el.classList.add('nv');
+}
+function syncY(key) {
+  const v=$(key+'-base').value;
+  [key+'-y1',key+'-y2',key+'-y3'].forEach(id=>$(id).value=v);
+}
+function onBaseInput(el) { $('base-rev').value=el.value.replace(/[^0-9]/g,'')||'0'; recalc(); }
+function fmtBase(el) { const n=parseInt($('base-rev').value)||0; el.value=n.toLocaleString('en-US'); }
+
+// ── chart ─────────────────────────────────────────────────────────
+let chart=null;
+function updateChart(bV, pV) {
+  const labels=['Baseline','Year 1','Year 2','Year 3'];
+  const deltas=pV.map((v,i)=>Math.max(0,v-bV[i]));
+  const pBase =pV.map((v,i)=>Math.min(v,bV[i]));
+  if(chart){ chart.data.datasets[0].data=bV; chart.data.datasets[1].data=pBase; chart.data.datasets[2].data=deltas; chart.update('none'); return; }
+  chart=new Chart($('revChart').getContext('2d'),{
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Brand Revenue (organic)', data:bV, backgroundColor:'#C4D3E3', borderColor:'#8a9ab5', borderWidth:1, borderRadius:4 },
+      { label:'Pattern Baseline', data:pBase, backgroundColor:'#3A55FF', borderColor:'#2a45ef', borderWidth:1, borderRadius:0, stack:'p' },
+      { label:'Uplift', data:deltas, backgroundColor:'rgba(58,85,255,.22)', borderColor:'#3A55FF', borderWidth:1, borderRadius:4, stack:'p' }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:c=>' '+c.dataset.label+': \$'+Math.round(c.raw).toLocaleString('en-US') }}},
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:"'Wix Madefor Display',sans-serif",size:12}} },
+        y:{ grid:{color:'#EBF0F5'}, ticks:{ font:{family:"'Wix Madefor Display',sans-serif",size:11},
+            callback:v=>'\$'+(v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v) }}
+      }
+    }
+  });
+}
+
+// ── MAIN RECALC (formulas exact to Excel) ────────────────────────
+function recalc() {
+  const C23 = parseFloat($('base-rev').value)||0;
+
+  // ── Waterfall: upside = C23 × Rate% × Solve%
+  const lbbRate=parseFloat($('lbb-rate').value)/100||0, lbbSolve=parseInt($('lbb-solve').value)/100;
+  const oosRate=parseFloat($('oos-rate').value)/100||0, oosSolve=parseInt($('oos-solve').value)/100;
+  const supRate=parseFloat($('sup-rate').value)/100||0, supSolve=parseInt($('sup-solve').value)/100;
+  const lbbUp=C23*lbbRate*lbbSolve, oosUp=C23*oosRate*oosSolve, supUp=C23*supRate*supSolve;
+  const seoUp=parseFloat($('seo-value').value)||0;
+  const WF=lbbUp+oosUp+supUp+seoUp; // Total waterfall = D24
+
+  $('lbb-pct').textContent=Math.round(lbbSolve*100)+'%';
+  $('oos-pct').textContent=Math.round(oosSolve*100)+'%';
+  $('sup-pct').textContent=Math.round(supSolve*100)+'%';
+  $('lbb-up').textContent='+'+fmt$(lbbUp);
+  $('oos-up').textContent='+'+fmt$(oosUp);
+  $('sup-up').textContent='+'+fmt$(supUp);
+  $('seo-up').textContent='+'+fmt$(seoUp);
+  $('lbb-base').textContent=fmt$(C23*lbbRate)+' at 3P sellers';
+  $('oos-base').textContent='on baseline rev '+fmt$(C23);
+  $('sup-base').textContent='on baseline rev '+fmt$(C23);
+  $('wf-total').textContent=fmt$(WF);
+
+  // ── Ads & Growth inputs
+  const tacos_bl=pP('tacos-base'), tacos_y1=pP('tacos-y1'), tacos_y2=pP('tacos-y2'), tacos_y3=pP('tacos-y3');
+  const nb_bl=pP('nb-base'),       nb_y1=pP('nb-y1'),       nb_y2=pP('nb-y2'),       nb_y3=pP('nb-y3');
+  const roas_bl=pF('roas-base'),   roas_y1=pF('roas-y1'),   roas_y2=pF('roas-y2'),   roas_y3=pF('roas-y3');
+  const byoy_y1=pP('byoy-y1'), byoy_y2=pP('byoy-y2'), byoy_y3=pP('byoy-y3');
+  const cat_y1=pP('cat-y1'),   cat_y2=pP('cat-y2'),   cat_y3=pP('cat-y3');
+
+  // ── Brand Revenue (end of year) — D23=C23*(1+D19)*(1+D20)
+  const D23=C23*(1+byoy_y1)*(1+cat_y1); // brand rev Y1
+  const E23=D23*(1+byoy_y2)*(1+cat_y2); // brand rev Y2
+  const F23=E23*(1+byoy_y3)*(1+cat_y3); // brand rev Y3
+
+  // ── Non-branded Ad Sales Baseline
+  // D13=C23*C10*C11*C12  E13=E4*C10*C11*C12 (E4=D23)  F13=F4*C10*C11*C12 (F4=E23... wait F4=F23=E23)
+  // Excel: F4="+F23" which is the Brand Rev Y3 END... but that creates a forward dependency.
+  // Looking carefully: E4=D23 (brand rev Y1), F4=F23=E23*(1+F19)*(1+F20) — but to avoid circular
+  // use prior-year brand rev as the base for each year's Non-branded baseline.
+  const D13=C23*tacos_bl*nb_bl*roas_bl;  // baseline
+  const E13=D23*tacos_bl*nb_bl*roas_bl;  // E4=D23
+  const F13=E23*tacos_bl*nb_bl*roas_bl;  // F4=F23=E23 (prior end-of-year brand rev)
+
+  // ── Ad Sales Pattern rev
+  // D14=(C23+WF)*D10*D11*D12  ← Y1: waterfall added to baseline
+  // E14=E5*E10*E11*E12         ← Y2: E5=D26 (Pattern Baseline START of Y2)
+  // F14=F5*F10*F11*F12         ← Y3: F5=E26 (Pattern Baseline START of Y3)
+  // Need to resolve iteratively since D26 depends on D14
+
+  // Y1
+  const D14=(C23+WF)*tacos_y1*nb_y1*roas_y1;
+  const D15=D14-D13; // Incremental Ads Y1
+  // D26=(C23+D24+D25)*(1+D20) — D24=WF, D25=D15
+  const D26=(C23+WF+D15)*(1+cat_y1); // Pattern Baseline end Y1
+
+  // Y2: E5=D26
+  const E14=D26*tacos_y2*nb_y2*roas_y2;
+  const E15=E14-E13; // Incremental Ads Y2
+  // E26=(D26+E24+E25)*(1+E20) — E24=SUM(E6:E9)=0, E25=E15
+  const E26=(D26+0+E15)*(1+cat_y2); // Pattern Baseline end Y2
+
+  // Y3: F5=E26
+  const F14=E26*tacos_y3*nb_y3*roas_y3;
+  const F15=F14-F13; // Incremental Ads Y3
+  // F26=(E26+F24+F25)*(1+F20) — F24=0, F25=F15
+  const F26=(E26+0+F15)*(1+cat_y3); // Pattern Baseline end Y3
+
+  // Deltas — D27=D26-D23, E27=E26-E23, F27=F26-F23
+  const d1=D26-D23, d2=E26-E23, d3=F26-F23;
+
+  // ── Update table
+  set('t-nb-bl', fmt$(D13));
+  set('t-nb-y1', fmt$(D13));  // D13 is the Y1 non-branded baseline
+  set('t-nb-y2', fmt$(E13));
+  set('t-nb-y3', fmt$(F13));
+  set('t-ap-y1', fmt$(D14));
+  set('t-ap-y2', fmt$(E14));
+  set('t-ap-y3', fmt$(F14));
+  set('t-ai-y1', fmt$(D15), D15>=0);
+  set('t-ai-y2', fmt$(E15), E15>=0);
+  set('t-ai-y3', fmt$(F15), F15>=0);
+  set('t-br-bl',  fmt$(C23));
+  set('t-br-y1',  fmt$(D23));
+  set('t-br-y2',  fmt$(E23));
+  set('t-br-y3',  fmt$(F23));
+  set('t-bb-y1',  fmt$(WF));
+  set('t-ad-y1',  fmt$(D15));
+  set('t-ad-y2',  fmt$(E15));
+  set('t-ad-y3',  fmt$(F15));
+  set('t-pb-y1',  fmt$(D26));
+  set('t-pb-y2',  fmt$(E26));
+  set('t-pb-y3',  fmt$(F26));
+  set('t-d-y1',   fmt$(d1), d1>=0);
+  set('t-d-y2',   fmt$(d2), d2>=0);
+  set('t-d-y3',   fmt$(d3), d3>=0);
+  set('t-dp-y1',  fmtPct(d1/(D23||1)), d1>=0);
+  set('t-dp-y2',  fmtPct(d2/(E23||1)), d2>=0);
+  set('t-dp-y3',  fmtPct(d3/(F23||1)), d3>=0);
+  set('total-delta',     fmt$(d3), d3>=0);
+  set('total-delta-pct', fmtPct(d3/(F23||1))+' uplift vs organic Y3');
+
+  updateChart([C23,D23,E23,F23],[C23,D26,E26,F26]);
+}
+
+document.addEventListener('DOMContentLoaded', function() { buildCatList(); onCatChange(); });
+</script>
+</body>
+</html>
