@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sansi US — Growth Projection · Pattern</title>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&family=STIX+Two+Text:ital,wght@1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Wix Madefor Display', Inter, system-ui, sans-serif; background: #EBF0F5; color: #090A0F; font-size: 14px; }
+
+  .header { background:#fff; border-bottom:1px solid #C4D3E3; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 3px rgba(7,7,8,0.06); }
+  .header-title { font-size:18px; font-weight:700; color:#090A0F; letter-spacing:-0.3px; }
+  .header-title em { font-style:italic; font-family:'STIX Two Text',serif; color:#009BFF; font-weight:400; }
+  .header-sub { font-size:12px; color:#6b7a96; margin-top:3px; }
+  .logo-wrap svg { width:100px; height:auto; }
+  .accent-bar { height:3px; background:linear-gradient(90deg,#0096FA 0%,#770BFF 100%); }
+
+  /* BUYBOX SECTION */
+  .bb-section { padding:18px 24px 16px; border-bottom:1px solid #C4D3E3; background:#fff; }
+  .bb-section-title { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#6b7a96; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .bb-section-title::after { content:''; flex:1; height:1px; background:#C4D3E3; }
+
+  .bb-tabs { display:flex; gap:6px; margin-bottom:14px; }
+  .bb-tab { padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid #C4D3E3; color:#6b7a96; background:#EBF0F5; font-family:'Wix Madefor Display',sans-serif; transition:all .15s; }
+  .bb-tab.active { background:#3A55FF; border-color:#3A55FF; color:#fff; }
+  .bb-tab:hover:not(.active) { border-color:#3A55FF; color:#3A55FF; }
+
+  .bb-stacked { height:22px; border-radius:8px; overflow:hidden; display:flex; background:#EBF0F5; margin-bottom:6px; }
+  .bb-seg { height:100%; transition:width .35s ease; }
+  .bb-bar-labels { display:flex; justify-content:space-between; font-size:11px; font-weight:600; margin-bottom:10px; }
+  .bb-bar-legend { display:flex; gap:16px; flex-wrap:wrap; }
+  .bb-leg-item { display:flex; align-items:center; gap:6px; font-size:12px; color:#090A0F; }
+  .bb-leg-dot { width:10px; height:10px; border-radius:3px; }
+
+  .bb-stats { display:flex; gap:10px; flex-wrap:wrap; }
+  .bb-stat { flex:1; min-width:110px; background:#EBF0F5; border:1px solid #C4D3E3; border-radius:10px; padding:12px 14px; box-shadow:0 2px 3px rgba(7,7,8,0.06); }
+  .bb-stat.c-primary { border-left:3px solid #3A55FF; }
+  .bb-stat.c-lbb     { border-left:3px solid #770BFF; }
+  .bb-stat.c-oos     { border-left:3px solid #009BFF; }
+  .bb-stat.c-sup     { border-left:3px solid #84C9F7; }
+  .bb-stat.c-sell    { border-left:3px solid #C4D3E3; cursor:pointer; transition:box-shadow .15s, border-color .15s; }
+  .bb-stat.c-sell:hover { border-color:#3A55FF; box-shadow:0 2px 8px rgba(58,85,255,0.15); }
+  .bb-stat-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:#6b7a96; margin-bottom:5px; }
+  .bb-stat-val   { font-size:24px; font-weight:700; letter-spacing:-0.5px; color:#090A0F; }
+  .bb-stat-sub   { font-size:11px; color:#6b7a96; margin-top:2px; }
+  .bb-stat-trend { font-size:11px; margin-top:4px; font-weight:600; }
+  .trend-bad  { color:#dc2626; }
+  .trend-good { color:#16a34a; }
+  .click-hint { font-size:10px; color:#3A55FF; margin-top:4px; font-weight:600; }
+
+  /* SELLER PANEL */
+  .seller-panel-wrap { overflow:hidden; max-height:0; transition:max-height 0.35s ease; background:#fff; border-top:1px solid #C4D3E3; }
+  .seller-panel-wrap.open { max-height:420px; }
+  .seller-panel { padding:16px 24px 20px; }
+  .seller-panel-title { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#6b7a96; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
+  .seller-panel-title span { display:flex; align-items:center; gap:10px; }
+  .seller-panel-title span::after { content:''; display:block; width:200px; height:1px; background:#C4D3E3; }
+  .close-btn { font-size:11px; color:#6b7a96; cursor:pointer; font-weight:600; padding:3px 8px; border:1px solid #C4D3E3; border-radius:4px; background:#EBF0F5; }
+  .close-btn:hover { color:#3A55FF; border-color:#3A55FF; }
+
+  .seller-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .seller-table thead th { background:#090A0F; color:#fff; padding:8px 10px; font-size:11px; font-weight:600; text-align:left; }
+  .seller-table thead th:nth-child(2),
+  .seller-table thead th:nth-child(3),
+  .seller-table thead th:nth-child(4) { text-align:right; }
+  .seller-table tbody tr { border-bottom:1px solid #EBF0F5; }
+  .seller-table tbody tr:nth-child(even) { background:#f7f9fb; }
+  .seller-table tbody tr:hover { background:#EBF0F5; }
+  .seller-table td { padding:7px 10px; }
+  .seller-table td:nth-child(2),
+  .seller-table td:nth-child(3),
+  .seller-table td:nth-child(4) { text-align:right; }
+  .type-badge { display:inline-block; font-size:9px; font-weight:700; padding:2px 6px; border-radius:10px; text-transform:uppercase; letter-spacing:0.5px; }
+  .badge-primary { background:#dce6ff; color:#3A55FF; }
+  .badge-lbb     { background:#ede3ff; color:#770BFF; }
+  .badge-oos     { background:#ddf0ff; color:#009BFF; }
+  .badge-sup     { background:#EBF0F5; color:#6b7a96; }
+  .new-badge { display:inline-block; font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; background:#fef3c7; color:#92400e; margin-left:4px; }
+  .bb-bar-mini { height:6px; border-radius:3px; display:inline-block; vertical-align:middle; }
+  .seller-scroll { max-height:280px; overflow-y:auto; }
+
+  /* BOTTOM */
+  .bottom { display:flex; height:calc(100vh - 310px); min-height:360px; }
+
+  .controls { width:290px; min-width:290px; background:#fff; border-right:1px solid #C4D3E3; padding:16px; overflow-y:auto; box-shadow:2px 0 6px rgba(7,7,8,0.04); }
+  .ctrl-section { margin-bottom:16px; }
+  .ctrl-title { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#6b7a96; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .ctrl-title::after { content:''; flex:1; height:1px; background:#C4D3E3; }
+
+  .baseline-row { background:#EBF0F5; border:1.5px solid #3A55FF; border-radius:10px; padding:10px 14px; margin-bottom:8px; }
+  .baseline-row label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#3A55FF; font-weight:600; display:block; margin-bottom:4px; }
+  .baseline-row input { width:100%; background:transparent; border:none; font-size:18px; font-weight:700; color:#090A0F; font-family:'Wix Madefor Display',sans-serif; }
+  .baseline-row input:focus { outline:none; }
+
+  .tbr-row { display:flex; justify-content:space-between; align-items:center; background:linear-gradient(90deg,rgba(0,150,250,.08),rgba(119,11,255,.08)); border:1px solid rgba(58,85,255,.2); border-radius:8px; padding:8px 12px; margin-bottom:14px; }
+  .tbr-row span:first-child { font-size:11px; color:#3A55FF; font-weight:600; text-transform:uppercase; letter-spacing:.8px; }
+  .tbr-row span:last-child  { font-size:15px; font-weight:700; color:#090A0F; }
+
+  .lever { background:#EBF0F5; border:1px solid #C4D3E3; border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+  .lever-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .lever-name { font-size:13px; font-weight:600; color:#090A0F; }
+  .lever-rate-wrap { display:flex; align-items:center; gap:4px; font-size:11px; color:#6b7a96; }
+  .rate-inp { width:48px; padding:2px 5px; font-size:11px; background:#fff; border:1px solid #C4D3E3; border-radius:4px; color:#090A0F; font-family:'Wix Madefor Display',sans-serif; }
+  .solve-row { display:flex; align-items:center; gap:8px; }
+  .solve-lbl { font-size:10px; color:#6b7a96; min-width:38px; text-transform:uppercase; letter-spacing:.8px; font-weight:600; }
+  .pct-lbl { font-size:13px; font-weight:700; min-width:34px; text-align:right; }
+  input[type=range] { flex:1; height:4px; cursor:pointer; }
+  input[type=range].r-blue   { accent-color:#3A55FF; }
+  input[type=range].r-purple { accent-color:#770BFF; }
+  input[type=range].r-bright { accent-color:#009BFF; }
+  .lever-up   { font-size:13px; font-weight:700; text-align:right; margin-top:6px; }
+  .lever-base { font-size:10px; color:#6b7a96; text-align:right; margin-top:2px; }
+
+  .lbb-card { background:#f5f0ff; border:1.5px solid rgba(119,11,255,.3); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+  .seo-card { background:#f0f8ff; border:1px solid rgba(0,155,255,.25); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+  .ads-card { background:#f0f8ff; border:1px solid rgba(0,155,255,.25); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+  .seo-inp { width:100%; margin-top:8px; background:#fff; border:1px solid #C4D3E3; border-radius:6px; padding:7px 10px; font-size:15px; font-weight:700; color:#009BFF; font-family:'Wix Madefor Display',sans-serif; }
+  .seo-inp:focus { outline:none; border-color:#009BFF; }
+  .ads-note { font-size:11px; color:#6b7a96; margin-top:6px; line-height:1.5; }
+
+  .total-box { background:linear-gradient(135deg,#0096FA,#3A55FF 50%,#770BFF); border-radius:12px; padding:14px 16px; margin-top:16px; box-shadow:0 2px 3px rgba(7,7,8,0.15),0 14px 14px rgba(7,7,8,0.1); }
+  .total-box .t-lbl { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.8); }
+  .total-box .t-val { font-size:24px; font-weight:800; letter-spacing:-.5px; color:#fff; margin-top:4px; }
+  .total-box .t-up  { font-size:12px; color:rgba(255,255,255,0.8); margin-top:3px; }
+
+  .chart-area { flex:1; padding:18px 22px; display:flex; flex-direction:column; background:#fff; }
+  .chart-sub { font-size:12px; color:#6b7a96; margin-bottom:12px; }
+  .chart-legend { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:12px; }
+  .cleg { display:flex; align-items:center; gap:6px; font-size:12px; color:#090A0F; }
+  .cleg-dot { width:10px; height:10px; border-radius:3px; }
+  .chart-wrap { flex:1; position:relative; min-height:200px; }
+  .data-note { font-size:11px; color:#6b7a96; margin-top:12px; border-top:1px solid #C4D3E3; padding-top:10px; line-height:1.6; }
+  .data-note strong { color:#090A0F; }
+
+  /* WINNABILITY MODAL */
+  .w-overlay{display:none;position:fixed;inset:0;background:rgba(9,10,15,.5);z-index:9999;align-items:center;justify-content:center;}
+  .w-overlay.open{display:flex;}
+  .w-modal{background:#fff;border-radius:14px;width:90vw;max-width:980px;max-height:85vh;overflow-y:auto;
+    box-shadow:0 2px 3px rgba(7,7,8,.12),0 30px 40px rgba(7,7,8,.18);}
+  .w-hdr{padding:14px 20px 10px;border-bottom:1px solid #C4D3E3;display:flex;justify-content:space-between;align-items:flex-start;
+    position:sticky;top:0;background:#fff;border-radius:14px 14px 0 0;z-index:1;}
+  .w-title{font-size:15px;font-weight:700;color:#090A0F;letter-spacing:-0.2px;}
+  .w-title em{font-style:italic;font-family:'STIX Two Text',serif;color:#009BFF;font-weight:400;}
+  .w-summary{font-size:12px;color:#090A0F;margin-top:8px;line-height:1.6;background:#EBF0F5;border-left:3px solid #3A55FF;padding:8px 12px;border-radius:0 6px 6px 0;max-width:720px;}
+  .w-summary b{color:#3A55FF;}
+  .w-close-btn{font-size:11px;color:#6b7a96;cursor:pointer;padding:5px 12px;border:1px solid #C4D3E3;border-radius:6px;background:#EBF0F5;font-weight:600;white-space:nowrap;margin-left:16px;flex-shrink:0;}
+  .w-close-btn:hover{color:#3A55FF;border-color:#3A55FF;}
+  .w-body{padding:14px 20px 20px;}
+  .w-cols{display:flex;gap:16px;}
+  .w-col{flex:1;}
+  .w-col-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#6b7a96;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #EBF0F5;}
+  .w-bkt{background:#EBF0F5;border:1px solid #C4D3E3;border-radius:10px;padding:12px 13px;margin-bottom:10px;}
+  .w-bkt-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .w-bkt-name{font-size:13px;font-weight:700;}
+  .w-bkt-meta{font-size:11px;color:#6b7a96;}
+  .w-rl{display:flex;justify-content:space-between;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:#6b7a96;margin-bottom:3px;}
+  .w-track{height:10px;background:#fff;border-radius:5px;overflow:hidden;border:1px solid #C4D3E3;margin-bottom:4px;}
+  .w-fill{height:100%;border-radius:5px;transition:width .3s ease;}
+  .w-nums{display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px;}
+  .w-nums b{color:#090A0F;}
+  .w-nums span{color:#6b7a96;}
+  .w-bid{display:flex;justify-content:space-between;font-size:11px;margin-top:3px;}
+  .w-bid-y{color:#3A55FF;font-weight:700;}
+  .w-bid-n{color:#dc2626;font-weight:700;}
+  .w-footer{font-size:10px;color:#6b7a96;margin-top:14px;border-top:1px solid #C4D3E3;padding-top:10px;line-height:1.6;}
+  .win-btn{display:block;width:100%;margin-top:8px;padding:6px 10px;background:#EBF0F5;border:1px solid #009BFF;border-radius:6px;
+    font-size:11px;font-weight:700;color:#009BFF;cursor:pointer;text-align:center;font-family:'Wix Madefor Display',sans-serif;}
+  .win-btn:hover{background:#ddf0ff;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">Sansi US — <em>Growth</em> Projection</div>
+    <div class="header-sub">Pattern estimates · Snapshot May 20, 2026 · Patio, Lawn &amp; Garden → Gardening &amp; Lawn Care</div>
+  </div>
+  <div class="logo-wrap">
+    <svg viewBox="0 0 675 135.7" xmlns="http://www.w3.org/2000/svg">
+      <style>.lb0{fill:#009BFF}.lb1{fill:#231F20}</style>
+      <g>
+        <path class="lb0" d="M81.55,0.99L0.99,81.55c-1.32,1.32-1.32,3.47,0,4.8l19.84,19.84c1.32,1.32,3.47,1.32,4.8,0l80.56-80.56c1.32-1.32,1.32-3.47,0-4.8L86.35,0.99C85.02-0.33,82.88-0.33,81.55,0.99z"/>
+        <path class="lb0" d="M114.73,34.17L67.37,81.54c-1.32,1.32-1.32,3.47,0,4.8l19.84,19.84c1.32,1.32,3.47,1.32,4.8,0l47.36-47.36c1.32-1.32,1.32-3.47,0-4.8l-19.84-19.84C118.2,32.85,116.05,32.85,114.73,34.17z"/>
+        <path class="lb1" d="M254.36,64.21c0,24.35-18.47,42.98-40.69,42.98c-12.74,0-22.39-5.23-28.6-13.73v40.25c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V25.35c0-1.1,0.89-2,2-2h13.65c1.1,0,2,0.89,2,2v9.77c6.21-8.66,15.85-13.89,28.6-13.89C235.9,21.23,254.36,40.02,254.36,64.21z M236.71,64.21c0-15.2-11.11-26.15-25.82-26.15c-14.71,0-25.82,10.95-25.82,26.15c0,15.2,11.11,26.15,25.82,26.15C225.6,90.35,236.71,79.4,236.71,64.21z"/>
+        <path class="lb1" d="M347.84,25.35v77.71c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2v-9.77c-6.21,8.66-15.85,13.89-28.6,13.89c-22.22,0-40.69-18.79-40.69-42.98c0-24.35,18.46-42.98,40.69-42.98c12.74,0,22.39,5.23,28.6,13.73v-9.6c0-1.1,0.89-2,2-2h13.65C346.95,23.35,347.84,24.25,347.84,25.35z M330.19,64.21c0-15.2-11.11-26.15-25.82-26.15s-25.82,10.95-25.82,26.15c0,15.2,11.11,26.15,25.82,26.15S330.19,79.4,330.19,64.21z"/>
+        <path class="lb1" d="M493.81,91.01c9.04,0,15.99-3.75,20.09-8.81c0.61-0.75,1.69-0.91,2.52-0.42l11.12,6.5c1.02,0.59,1.33,1.95,0.62,2.89c-7.59,10.04-19.37,16.03-34.51,16.03c-26.96,0-44.45-18.46-44.45-42.98c0-24.18,17.48-42.98,43.14-42.98c24.35,0,41.02,19.61,41.02,43.14c0,2.45-0.33,5.07-0.65,7.35h-65.04C470.44,84.47,480.74,91.01,493.81,91.01z M515.54,57.34c-2.45-14.05-12.75-20.1-23.37-20.1c-13.24,0-22.22,7.84-24.67,20.1H515.54z"/>
+        <path class="lb1" d="M675,54.89v48.17c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V56.69c0-12.42-7.19-18.96-18.3-18.96c-11.6,0-20.75,6.86-20.75,23.53v41.8c0,1.1-0.89,2-2,2h-13.65c-1.1,0-2-0.89-2-2V25.35c0-1.1,0.89-2,2-2h13.65c1.1,0,2,0.89,2,2v8.46c5.39-8.5,14.22-12.58,25.33-12.58C661.93,21.23,675,33.65,675,54.89z"/>
+        <path class="lb1" d="M583.58,21.88c-10.29,0-20.26,4.09-25.16,15.2V25.35c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v77.71c0,1.1,0.89,2,2,2h13.65c1.1,0,2-0.89,2-2V63.88c0-18.3,13.28-22.88,25.16-22.88h6.15c1.1,0,2-0.89,2-2V23.88c0-1.1-0.89-2-2-2H583.58z"/>
+        <path class="lb1" d="M397.4,40.35c1.1,0,2-0.89,2-2v-13c0-1.1-0.89-2-2-2h-21V2c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v78.96c0,16.77,8.09,24.83,24.97,24.83l13.68-0.01c1.1,0,2-0.9,2-2V91.42c0-1.1-0.9-2-2-2c-2.84,0-8.3-0.01-10.5-0.01c-8.05,0-10.5-2.09-10.5-9.85V40.35H397.4z"/>
+        <path class="lb1" d="M445.33,40.35c1.1,0,2-0.89,2-2v-13c0-1.1-0.89-2-2-2h-21V2c0-1.1-0.89-2-2-2h-13.65c-1.1,0-2,0.89-2,2v78.96c0,16.77,8.09,24.83,24.97,24.83l13.68-0.01c1.1,0,1.99-0.9,1.99-2V91.42c0-1.1-0.9-2-2-2c-2.84,0-8.3-0.01-10.5-0.01c-8.05,0-10.5-2.09-10.5-9.85V40.35H445.33z"/>
+      </g>
+    </svg>
+  </div>
+  <button id="lang-toggle" onclick="toggleLang()"
+    style="margin-left:16px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;
+           cursor:pointer;border:1px solid #C4D3E3;background:#EBF0F5;color:#090A0F;
+           font-family:'Wix Madefor Display',sans-serif;white-space:nowrap;">
+    中文
+  </button>
+</div>
+<div class="accent-bar"></div>
+
+<!-- BUYBOX SECTION -->
+<div class="bb-section">
+  <div class="bb-section-title">Buybox Breakdown</div>
+  <div style="display:flex;gap:24px;align-items:flex-start;">
+    <div style="flex:1;min-width:0;">
+      <div class="bb-tabs">
+        <button class="bb-tab" onclick="setWindow(30,this)">30d</button>
+        <button class="bb-tab" onclick="setWindow(90,this)">90d</button>
+        <button class="bb-tab active" onclick="setWindow(180,this)">180d</button>
+        <button class="bb-tab" onclick="setWindow(365,this)">365d</button>
+      </div>
+      <div class="bb-stacked">
+        <div class="bb-seg" id="seg-primary" style="background:#3A55FF;"></div>
+        <div class="bb-seg" id="seg-lbb"     style="background:#770BFF;"></div>
+        <div class="bb-seg" id="seg-oos"     style="background:#009BFF;"></div>
+        <div class="bb-seg" id="seg-sup"     style="background:#84C9F7;"></div>
+      </div>
+      <div class="bb-bar-labels">
+        <span id="bar-lbl-primary" style="color:#3A55FF;"></span>
+        <span id="bar-lbl-lbb"     style="color:#770BFF;"></span>
+        <span id="bar-lbl-oos"     style="color:#009BFF;"></span>
+        <span id="bar-lbl-sup"     style="color:#6b7a96;"></span>
+      </div>
+      <div class="bb-bar-legend">
+        <div class="bb-leg-item"><div class="bb-leg-dot" style="background:#3A55FF;"></div>Primary seller</div>
+        <div class="bb-leg-item"><div class="bb-leg-dot" style="background:#770BFF;"></div>Lost buybox (3P)</div>
+        <div class="bb-leg-item"><div class="bb-leg-dot" style="background:#009BFF;"></div>Out of stock</div>
+        <div class="bb-leg-item"><div class="bb-leg-dot" style="background:#84C9F7;"></div>Suppressed</div>
+      </div>
+    </div>
+    <div class="bb-stats" style="flex:2.2;">
+      <div class="bb-stat c-primary">
+        <div class="bb-stat-label">Primary Seller</div>
+        <div class="bb-stat-val" id="stat-primary" style="color:#3A55FF;">—</div>
+        <div class="bb-stat-sub">of buybox time</div>
+        <div class="bb-stat-trend" id="stat-primary-trend"></div>
+      </div>
+      <div class="bb-stat c-lbb">
+        <div class="bb-stat-label">Lost Buybox (3P)</div>
+        <div class="bb-stat-val" id="stat-lbb" style="color:#770BFF;">—</div>
+        <div class="bb-stat-sub">captured by other sellers</div>
+        <div class="bb-stat-trend" id="stat-lbb-trend"></div>
+      </div>
+      <div class="bb-stat c-oos">
+        <div class="bb-stat-label">Out of Stock</div>
+        <div class="bb-stat-val" id="stat-oos" style="color:#009BFF;">—</div>
+        <div class="bb-stat-sub">truly lost revenue</div>
+        <div class="bb-stat-trend" id="stat-oos-trend"></div>
+      </div>
+      <div class="bb-stat c-sup">
+        <div class="bb-stat-label">Suppressed</div>
+        <div class="bb-stat-val" id="stat-sup" style="color:#6b7a96;">—</div>
+        <div class="bb-stat-sub">listing invisible</div>
+        <div class="bb-stat-trend" id="stat-sup-trend"></div>
+      </div>
+      <div class="bb-stat c-sell" onclick="toggleSellerPanel()">
+        <div class="bb-stat-label">Active Sellers</div>
+        <div class="bb-stat-val" id="stat-sellers" style="color:#090A0F;">—</div>
+        <div class="bb-stat-sub">on the listing</div>
+        <div class="bb-stat-trend" id="stat-new-sellers" style="color:#dc2626;font-weight:600;"></div>
+        <div class="click-hint" id="seller-hint">▼ Click to expand</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SELLER PANEL -->
+<div class="seller-panel-wrap" id="seller-panel-wrap">
+  <div class="seller-panel">
+    <div class="seller-panel-title">
+      <span>Seller Buybox Detail &nbsp;·&nbsp; <span id="panel-window-label">180d</span></span>
+      <button class="close-btn" onclick="toggleSellerPanel()">✕ Close</button>
+    </div>
+    <div class="seller-scroll">
+      <table class="seller-table">
+        <thead>
+          <tr>
+            <th>Seller</th>
+            <th>Type</th>
+            <th>BB Share</th>
+            <th>Est. Rev</th>
+            <th>First Seen</th>
+          </tr>
+        </thead>
+        <tbody id="seller-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM -->
+<div class="bottom">
+  <div class="controls">
+    <div class="baseline-row">
+      <label>Top Seller Revenue — T12M</label>
+      <input type="text" id="baseline-display"
+        value="1,445,547"
+        style="width:100%;background:transparent;border:none;font-size:18px;font-weight:700;color:#090A0F;font-family:'Wix Madefor Display',sans-serif;"
+        oninput="onBaselineInput(this)"
+        onblur="formatBaselineDisplay(this)">
+      <input type="hidden" id="baseline" value="1445547">
+    </div>
+<div class="ctrl-section">
+      <div class="ctrl-title">3P Recapture</div>
+      <div class="lbb-card">
+        <div class="lever-hdr">
+          <span class="lever-name" style="color:#770BFF;">Lost Buybox</span>
+          <span class="lever-rate-wrap">Rate: <input class="rate-inp" type="number" id="lbb-rate" value="6.21" step="0.1" min="0" max="100" oninput="recalc()">%</span>
+        </div>
+        <div class="solve-row">
+          <span class="solve-lbl">Solve</span>
+          <input type="range" class="r-purple" id="lbb-solve" min="0" max="100" value="0" oninput="recalc()">
+          <span class="pct-lbl" id="lbb-pct" style="color:#770BFF;">80%</span>
+        </div>
+        <div class="lever-up" id="lbb-upside" style="color:#770BFF;">—</div>
+        <div class="lever-base" id="lbb-basis"></div>
+      </div>
+    </div>
+
+    <div class="ctrl-section">
+      <div class="ctrl-title">Listing Health</div>
+      <div class="lever">
+        <div class="lever-hdr">
+          <span class="lever-name">Out of Stock</span>
+          <span class="lever-rate-wrap">Rate: <input class="rate-inp" type="number" id="oos-rate" value="8.41" step="0.1" min="0" max="100" oninput="recalc()">%</span>
+        </div>
+        <div class="solve-row">
+          <span class="solve-lbl">Solve</span>
+          <input type="range" class="r-blue" id="oos-solve" min="0" max="100" value="50" oninput="recalc()">
+          <span class="pct-lbl" id="oos-pct" style="color:#3A55FF;">50%</span>
+        </div>
+        <div class="lever-up" id="oos-upside" style="color:#3A55FF;">—</div>
+        <div class="lever-base" id="oos-basis"></div>
+      </div>
+      <div class="lever">
+        <div class="lever-hdr">
+          <span class="lever-name">Suppression</span>
+          <span class="lever-rate-wrap">Rate: <input class="rate-inp" type="number" id="sup-rate" value="1.53" step="0.1" min="0" max="100" oninput="recalc()">%</span>
+        </div>
+        <div class="solve-row">
+          <span class="solve-lbl">Solve</span>
+          <input type="range" class="r-blue" id="sup-solve" min="0" max="100" value="50" oninput="recalc()">
+          <span class="pct-lbl" id="sup-pct" style="color:#3A55FF;">50%</span>
+        </div>
+        <div class="lever-up" id="sup-upside" style="color:#3A55FF;">—</div>
+        <div class="lever-base" id="sup-basis"></div>
+      </div>
+    </div>
+
+    <div class="ctrl-section">
+      <div class="ctrl-title">Growth</div>
+      <div class="seo-card">
+        <div class="lever-name" style="color:#009BFF;font-size:12px;">SEO / Content Lift ($)</div>
+        <input class="seo-inp" type="number" id="seo-value" value="14455" oninput="recalc()">
+      </div>
+      <div class="ads-card">
+        <div class="lever-hdr" style="margin-bottom:6px;">
+          <span class="lever-name" style="color:#009BFF;">Ads Growth</span>
+          <span class="pct-lbl" id="ads-pct-display" style="color:#009BFF;">16.7%</span>
+        </div>
+        <div class="solve-row">
+          <span class="solve-lbl" style="color:#009BFF;">% rev</span>
+          <input type="range" class="r-bright" id="ads-pct" min="0" max="50" value="16.7" step="0.1" oninput="recalc()">
+        </div>
+        <div class="ads-note">⚠ TACOS not in presales. ~44% search term ad coverage (850 of 2,114 terms).</div>
+        <div class="lever-up" id="ads-upside" style="color:#009BFF;">—</div>
+        <button class="win-btn" onclick="openWin()">▲ View search winnability</button>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <div class="t-lbl">Total Brand Opportunity</div>
+      <div class="t-val" id="total-value">—</div>
+      <div class="t-up" id="total-uplift">—</div>
+    </div>
+  </div>
+
+  <div class="chart-area">
+    <div class="chart-sub">Growth waterfall · all figures directional · not actuals</div>
+    <div class="chart-legend">
+      <div class="cleg"><div class="cleg-dot" style="background:#C4D3E3;border:1px solid #aaa;"></div>Baseline / Total</div>
+      <div class="cleg"><div class="cleg-dot" style="background:#770BFF;"></div>3P Recapture (LBB)</div>
+      <div class="cleg"><div class="cleg-dot" style="background:#3A55FF;"></div>Listing Health Fix</div>
+      <div class="cleg"><div class="cleg-dot" style="background:#009BFF;"></div>Growth Levers</div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="waterfall"></canvas>
+    </div>
+    <div class="data-note">
+      <strong>Methodology:</strong> Baseline = top seller T12M (Pattern est.). LBB = 3P-captured revenue, applied to top seller baseline. OOS &amp; suppression = truly lost revenue, applied to total brand rev. Ads &amp; SEO grow total from there. <strong>Not actuals. Do not forecast or commit to these figures.</strong>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SELLER DATA (all windows) ──
+const SELLERS = {
+  365: [
+    {seller_name:"Sansi Lighting Direct",seller_type:"primary_seller",seller_share:0.8582,seller_timeframe_rev:1445547,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Amazon.com",seller_type:"lost_buybox",seller_share:0.0667,seller_timeframe_rev:780813,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Out of Stock",seller_type:"out_of_stock",seller_share:0.0604,seller_timeframe_rev:707293,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Suppressed Buybox",seller_type:"suppression",seller_share:0.0100,seller_timeframe_rev:116519,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Sansiabc",seller_type:"lost_buybox",seller_share:0.0047,seller_timeframe_rev:55176,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"dollarmax",seller_type:"lost_buybox",seller_share:0.0000,seller_timeframe_rev:274,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"London Town LLC",seller_type:"lost_buybox",seller_share:0.0000,seller_timeframe_rev:56,new_seller:true,seller_first_appearance:"2025-05-23"},
+    {seller_name:"Magunas",seller_type:"lost_buybox",seller_share:0.0000,seller_timeframe_rev:52,new_seller:true,seller_first_appearance:"2025-04-02"},
+    {seller_name:"Dieglyn Discount Group",seller_type:"lost_buybox",seller_share:0.0000,seller_timeframe_rev:50,new_seller:true,seller_first_appearance:"2025-04-04"}
+  ],
+  180: [
+    {seller_name:"Sansi Lighting Direct",seller_type:"primary_seller",seller_share:0.8385,seller_timeframe_rev:4940999,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Out of Stock",seller_type:"out_of_stock",seller_share:0.0841,seller_timeframe_rev:495346,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Amazon.com",seller_type:"lost_buybox",seller_share:0.0589,seller_timeframe_rev:346978,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Suppressed Buybox",seller_type:"suppression",seller_share:0.0153,seller_timeframe_rev:90402,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Sansiabc",seller_type:"lost_buybox",seller_share:0.0032,seller_timeframe_rev:18954,new_seller:false,seller_first_appearance:"2025-02-28"}
+  ],
+  90: [
+    {seller_name:"Sansi Lighting Direct",seller_type:"primary_seller",seller_share:0.8324,seller_timeframe_rev:2456091,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Out of Stock",seller_type:"out_of_stock",seller_share:0.0906,seller_timeframe_rev:267409,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Amazon.com",seller_type:"lost_buybox",seller_share:0.0527,seller_timeframe_rev:155478,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Suppressed Buybox",seller_type:"suppression",seller_share:0.0238,seller_timeframe_rev:70289,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Sansiabc",seller_type:"lost_buybox",seller_share:0.0005,seller_timeframe_rev:1360,new_seller:false,seller_first_appearance:"2025-02-28"}
+  ],
+  30: [
+    {seller_name:"Sansi Lighting Direct",seller_type:"primary_seller",seller_share:0.8294,seller_timeframe_rev:816415,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Out of Stock",seller_type:"out_of_stock",seller_share:0.0609,seller_timeframe_rev:59900,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Suppressed Buybox",seller_type:"suppression",seller_share:0.0587,seller_timeframe_rev:57786,new_seller:false,seller_first_appearance:null},
+    {seller_name:"Amazon.com",seller_type:"lost_buybox",seller_share:0.0510,seller_timeframe_rev:50218,new_seller:false,seller_first_appearance:"2025-02-28"},
+    {seller_name:"Sansiabc",seller_type:"lost_buybox",seller_share:0.0000,seller_timeframe_rev:41,new_seller:false,seller_first_appearance:"2025-02-28"}
+  ]
+};
+const BB = {
+  30:  { primary:82.94, lbb:5.14,  oos:6.09,  sup:5.87,  sellers:3,  newSellers:0 },
+  90:  { primary:83.24, lbb:5.32,  oos:9.06,  sup:2.38,  sellers:3,  newSellers:0 },
+  180: { primary:83.85, lbb:6.21,  oos:8.41,  sup:1.53,  sellers:3,  newSellers:0 },
+  365: { primary:85.82, lbb:7.10,  oos:6.04,  sup:1.00,  sellers:8,  newSellers:3 },
+};
+
+let activeWindow = 180;
+let panelOpen = false;
+
+function pct(v) { return (v*100).toFixed(1)+'%'; }
+function fmtRev(v) { return '$'+(v/1000).toFixed(0)+'K'; }
+
+function setWindow(w, el) {
+  activeWindow = w;
+  document.querySelectorAll('.bb-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  updateBB();
+  syncRates();
+  if (panelOpen) renderSellerTable();
+}
+
+function updateBB() {
+  const d = BB[activeWindow];
+  const prevW = {30:30,90:30,180:90,365:180}[activeWindow];
+  const prev  = BB[prevW];
+
+  document.getElementById('seg-primary').style.width = d.primary+'%';
+  document.getElementById('seg-lbb').style.width     = d.lbb+'%';
+  document.getElementById('seg-oos').style.width     = d.oos+'%';
+  document.getElementById('seg-sup').style.width     = d.sup+'%';
+
+  document.getElementById('bar-lbl-primary').textContent = d.primary.toFixed(1)+'% '+t('lbl-primary');
+  document.getElementById('bar-lbl-lbb').textContent     = d.lbb.toFixed(1)+'% '+(currentLang==='zh'?'第三方':'3P');
+  document.getElementById('bar-lbl-oos').textContent     = d.oos.toFixed(1)+'% '+(currentLang==='zh'?'缺货':'OOS');
+  document.getElementById('bar-lbl-sup').textContent     = d.sup.toFixed(1)+'% '+(currentLang==='zh'?'抑制':'Supp.');
+
+  document.getElementById('stat-primary').textContent = d.primary.toFixed(1)+'%';
+  document.getElementById('stat-lbb').textContent     = d.lbb.toFixed(1)+'%';
+  document.getElementById('stat-oos').textContent     = d.oos.toFixed(1)+'%';
+  document.getElementById('stat-sup').textContent     = d.sup.toFixed(1)+'%';
+  document.getElementById('stat-sellers').textContent = d.sellers;
+  document.getElementById('stat-new-sellers').textContent = d.newSellers+(currentLang==='zh'?' 个新卖家（期间内）':' new sellers in window');
+
+  if (activeWindow > 30) {
+    const fmtT = (v, badIfPos) => {
+      const sign = v > 0 ? '+' : '';
+      const cls  = badIfPos ? (v>0?'trend-bad':'trend-good') : (v>0?'trend-good':'trend-bad');
+      return `<span class="${cls}">${sign}${v.toFixed(1)}pp vs shorter window</span>`;
+    };
+    document.getElementById('stat-primary-trend').innerHTML = fmtT(d.primary-prev.primary, true);
+    document.getElementById('stat-lbb-trend').innerHTML     = fmtT(d.lbb-prev.lbb, true);
+    document.getElementById('stat-oos-trend').innerHTML     = fmtT(d.oos-prev.oos, true);
+    document.getElementById('stat-sup-trend').innerHTML     = fmtT(d.sup-prev.sup, true);
+  } else {
+    ['stat-primary-trend','stat-lbb-trend','stat-oos-trend','stat-sup-trend']
+      .forEach(id => document.getElementById(id).innerHTML='');
+  }
+}
+
+function syncRates() {
+  const d = BB[activeWindow];
+  document.getElementById('lbb-rate').value = d.lbb.toFixed(2);
+  document.getElementById('oos-rate').value = d.oos.toFixed(2);
+  document.getElementById('sup-rate').value = d.sup.toFixed(2);
+  recalc();
+}
+
+function toggleSellerPanel() {
+  panelOpen = !panelOpen;
+  const wrap = document.getElementById('seller-panel-wrap');
+  const hint = document.getElementById('seller-hint');
+  wrap.classList.toggle('open', panelOpen);
+  hint.textContent = panelOpen ? '▲ Click to collapse' : '▼ Click to expand';
+  if (panelOpen) renderSellerTable();
+}
+
+function renderSellerTable() {
+  document.getElementById('panel-window-label').textContent = activeWindow+'d';
+  const rows = SELLERS[activeWindow];
+  const typeOrder = {primary_seller:0, lost_buybox:1, out_of_stock:2, suppression:3};
+  const badgeMap = {
+    primary_seller: '<span class="type-badge badge-primary">Primary</span>',
+    lost_buybox:    '<span class="type-badge badge-lbb">3P</span>',
+    out_of_stock:   '<span class="type-badge badge-oos">OOS</span>',
+    suppression:    '<span class="type-badge badge-sup">Suppressed</span>',
+  };
+  const barColor = {primary_seller:'#3A55FF',lost_buybox:'#770BFF',out_of_stock:'#009BFF',suppression:'#84C9F7'};
+  const maxShare = Math.max(...rows.map(r=>r.seller_share));
+
+  const tbody = document.getElementById('seller-tbody');
+  tbody.innerHTML = rows.map(r => {
+    const barW = Math.round((r.seller_share/maxShare)*80);
+    const newTag = r.new_seller ? '<span class="new-badge">NEW</span>' : '';
+    const firstSeen = r.seller_first_appearance ? r.seller_first_appearance.slice(0,10) : '—';
+    return `<tr>
+      <td><strong>${r.seller_name}</strong>${newTag}</td>
+      <td style="text-align:left">${badgeMap[r.seller_type]||''}</td>
+      <td>
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <span style="display:inline-block;width:${barW}px;height:6px;border-radius:3px;background:${barColor[r.seller_type]||'#C4D3E3'};"></span>
+          ${(r.seller_share*100).toFixed(2)}%
+        </span>
+      </td>
+      <td>${r.seller_timeframe_rev>0?'~'+fmtRev(r.seller_timeframe_rev):'—'}</td>
+      <td>${firstSeen}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── WATERFALL ──
+let chart = null;
+function fmt(n) { return '$'+Math.round(n).toLocaleString('en-US'); }
+
+function recalc() {
+  const baseline = parseFloat(document.getElementById('baseline').value)||0;
+  const lbbRate  = parseFloat(document.getElementById('lbb-rate').value)/100||0;
+  const lbbSolve = parseInt(document.getElementById('lbb-solve').value)/100;
+  const lbb3P    = baseline*lbbRate/(1-lbbRate);
+  const lbbUp    = lbb3P*lbbSolve;
+  const totalBrand = baseline+lbb3P;
+
+  const oosRate  = parseFloat(document.getElementById('oos-rate').value)/100||0;
+  const oosSolve = parseInt(document.getElementById('oos-solve').value)/100;
+  const oosUp    = totalBrand*oosRate*oosSolve;
+
+  const supRate  = parseFloat(document.getElementById('sup-rate').value)/100||0;
+  const supSolve = parseInt(document.getElementById('sup-solve').value)/100;
+  const supUp    = totalBrand*supRate*supSolve;
+
+  const seoUp  = parseFloat(document.getElementById('seo-value').value)||0;
+  const adsPct = parseFloat(document.getElementById('ads-pct').value)/100;
+  const adsUp  = totalBrand*adsPct;
+
+  const total  = baseline+lbbUp+oosUp+supUp+seoUp+adsUp;
+  const uplift = total-baseline;
+  const upliftP= ((uplift/baseline)*100).toFixed(1);
+
+  // total-brand-display removed
+  const tbrEl = document.getElementById('total-brand-display'); if(tbrEl) tbrEl.textContent = fmt(totalBrand);
+  document.getElementById('lbb-pct').textContent  = Math.round(lbbSolve*100)+'%';
+  document.getElementById('oos-pct').textContent  = Math.round(oosSolve*100)+'%';
+  document.getElementById('sup-pct').textContent  = Math.round(supSolve*100)+'%';
+  document.getElementById('ads-pct-display').textContent = (adsPct*100).toFixed(1)+'%';
+
+  document.getElementById('lbb-upside').textContent = '+'+fmt(lbbUp);
+  document.getElementById('lbb-basis').textContent  = fmt(lbb3P)+' at 3P sellers';
+  document.getElementById('oos-upside').textContent = '+'+fmt(oosUp);
+  document.getElementById('oos-basis').textContent  = 'on total brand rev '+fmt(totalBrand);
+  document.getElementById('sup-upside').textContent = '+'+fmt(supUp);
+  document.getElementById('sup-basis').textContent  = 'on total brand rev '+fmt(totalBrand);
+  document.getElementById('ads-upside').textContent = '+'+fmt(257371);
+  document.getElementById('total-value').textContent = fmt(1718628);
+  const fixedTotal = 1718628;
+  const fixedUplift = fixedTotal - baseline;
+  const fixedUpliftP = ((fixedUplift/baseline)*100).toFixed(1);
+  document.getElementById('total-uplift').textContent = '+'+fmt(fixedUplift)+' (+'+fixedUpliftP+'%) '+(currentLang==='zh'?'vs 基准':'vs baseline');
+
+  const labels = ['Baseline','LBB\nRecapture','Out of\nStock','Suppression','SEO /\nContent','Ads\nGrowth','Total\nOpportunity'];
+  const adsUpFixed = 257371;
+  const totalFixed = 1718628;
+  const vals   = [baseline,lbbUp,oosUp,supUp,seoUp,adsUpFixed,totalFixed];
+  const floats = [0,baseline,baseline+lbbUp,baseline+lbbUp+oosUp,baseline+lbbUp+oosUp+supUp,baseline+lbbUp+oosUp+supUp+seoUp,0];
+  const colors = ['#C4D3E3','#770BFF','#3A55FF','#3A55FF','#009BFF','#009BFF','#C4D3E3'];
+
+  if (chart) chart.destroy();
+  Chart.defaults.color='#6b7a96';
+  Chart.defaults.borderColor='#EBF0F5';
+  const ctx = document.getElementById('waterfall').getContext('2d');
+  chart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {data:floats,backgroundColor:'rgba(0,0,0,0)',borderWidth:0,stack:'stack'},
+        {data:vals,backgroundColor:colors,borderWidth:0,borderRadius:{topLeft:5,topRight:5},stack:'stack'}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#fff',borderColor:'#C4D3E3',borderWidth:1,
+          titleColor:'#090A0F',bodyColor:'#3A55FF',bodyFont:{weight:'bold',size:14},
+          callbacks:{label:ctx=>ctx.datasetIndex===1?' '+fmt(ctx.raw):null},
+          filter:item=>item.datasetIndex===1
+        }
+      },
+      scales:{
+        x:{stacked:true,grid:{display:false},border:{display:false},
+          ticks:{font:{size:11,family:"'Wix Madefor Display',sans-serif"},color:'#6b7a96'}},
+        y:{stacked:true,grid:{color:'#EBF0F5'},border:{display:false},
+          ticks:{callback:v=>'$'+(v/1e6).toFixed(1)+'M',font:{size:11,family:"'Wix Madefor Display',sans-serif"},color:'#6b7a96'}}
+      }
+    },
+    plugins:[{
+      id:'valLabels',
+      afterDatasetsDraw(chart){
+        const {ctx,data}=chart;
+        chart.getDatasetMeta(1).data.forEach((bar,i)=>{
+          const val=data.datasets[1].data[i];
+          const float=data.datasets[0].data[i];
+          const isInc=i>0&&i<labels.length-1;
+          ctx.save();
+          ctx.fillStyle='#090A0F';
+          ctx.font='bold 11px "Wix Madefor Display",sans-serif';
+          ctx.textAlign='center';
+          ctx.textBaseline='bottom';
+          ctx.fillText((isInc?'+':'')+fmt(val),bar.x,chart.scales.y.getPixelForValue(float+val)-5);
+          ctx.restore();
+        });
+      }
+    }]
+  });
+}
+
+
+// ── WINNABILITY DATA ──
+const WB = [
+  {n:'Winning', c:'#770BFF', kws:282, clk:2964, pot:252,  cap:25.8, auc:72.0, bid:203, nob:79,  col:'L'},
+  {n:'High',    c:'#22c55e', kws:458, clk:4087, pot:7393, cap:3.9,  auc:38.9, bid:178, nob:280, col:'L'},
+  {n:'Medium',  c:'#f59e0b', kws:456, clk:432,  pot:2201, cap:1.5,  auc:37.9, bid:173, nob:283, col:'R'},
+  {n:'Low',     c:'#ef4444', kws:329, clk:275,  pot:824,  cap:2.4,  auc:40.1, bid:132, nob:197, col:'R'},
+  {n:'Very Low',c:'#9ca3af', kws:589, clk:487,  pot:618,  cap:2.6,  auc:27.8, bid:164, nob:425, col:'R'}
+];
+let _wInit = false;
+function openWin() {
+  if (!_wInit) {
+    _wInit = true;
+    const maxC = WB[0].cap;
+    const row = b => {
+      const bw = Math.min(100, Math.round(b.cap / maxC * 100));
+      return '<div class="w-bkt">' +
+        '<div class="w-bkt-top"><span class="w-bkt-name" style="color:'+b.c+'">'+b.n+' &middot; '+b.kws.toLocaleString()+' kws</span>' +
+        '<span class="w-bkt-meta">'+b.clk.toLocaleString()+' + '+b.pot.toLocaleString()+' potential</span></div>' +
+        '<div class="w-rl"><span>Clicks captured</span><span style="color:'+b.c+'">'+b.cap.toFixed(1)+'%</span></div>' +
+        '<div class="w-track"><div class="w-fill" style="width:'+bw+'%;background:'+b.c+'"></div></div>' +
+        '<div class="w-nums"><b>'+b.clk.toLocaleString()+'/day</b><span>+'+b.pot.toLocaleString()+'/day potential</span></div>' +
+        '<div class="w-rl"><span>In auction</span><span style="color:#3A55FF">'+b.auc.toFixed(1)+'%</span></div>' +
+        '<div class="w-track"><div class="w-fill" style="width:'+b.auc+'%;background:#3A55FF"></div></div>' +
+        '<div class="w-bid"><span class="w-bid-y">'+b.bid.toLocaleString()+' bidding</span><span class="w-bid-n">'+b.nob.toLocaleString()+' not bidding</span></div>' +
+        '</div>';
+    };
+    const L = WB.filter(b=>b.col==='L').map(row).join('');
+    const R = WB.filter(b=>b.col==='R').map(row).join('');
+    const totT = WB.slice(1).reduce((s,b)=>s+b.kws,0);
+    const totP = WB.slice(1).reduce((s,b)=>s+b.pot,0);
+    document.getElementById('w-summary').innerHTML =
+      'Sansi is estimated to be winning across <b>282 search terms</b>, generating approximately <b>2,964 brand clicks per day</b>.' +
+      ' A further <b>'+totT.toLocaleString()+' terms</b> represent an estimated <b>'+totP.toLocaleString()+' additional potential clicks per day</b>. Figures are directional estimates.';
+    document.getElementById('w-body').innerHTML =
+      '<div class="w-cols">' +
+      '<div class="w-col"><div class="w-col-title">Winning &amp; High Priority</div>'+L+'</div>' +
+      '<div class="w-col"><div class="w-col-title">Monitor &amp; Develop</div>'+R+'</div>' +
+      '</div>' +
+      '<div class="w-footer">Figures are directional estimates &middot; Pattern presales-intel snapshot May 20 2026 &middot; ' +
+      'Click share shows brand vs top shelf competitor, not total term share &middot; 933 of 2,114 terms have no active bidding</div>';
+  }
+  document.getElementById('w-overlay').classList.add('open');
+}
+function closeWin() {
+  document.getElementById('w-overlay').classList.remove('open');
+}
+
+// ── BASELINE INPUT HELPERS ──
+function onBaselineInput(el) {
+  const raw = el.value.replace(/[^0-9]/g,'');
+  document.getElementById('baseline').value = raw || '0';
+  recalc();
+}
+function formatBaselineDisplay(el) {
+  const n = parseInt(document.getElementById('baseline').value)||0;
+  el.value = n.toLocaleString('en-US');
+}
+
+// ── i18n TRANSLATIONS ──
+const LANGS = {
+  en: {
+    'bb-section-title':'Buybox Breakdown',
+    'lbl-primary':'Primary seller','lbl-lbb':'Lost buybox (3P)','lbl-oos':'Out of stock','lbl-sup':'Suppressed',
+    'stat-label-primary':'Primary Seller','stat-sub-primary':'of buybox time',
+    'stat-label-lbb':'Lost Buybox (3P)','stat-sub-lbb':'captured by other sellers',
+    'stat-label-oos':'Out of Stock','stat-sub-oos':'truly lost revenue',
+    'stat-label-sup':'Suppressed','stat-sub-sup':'listing invisible',
+    'stat-label-sell':'Active Sellers','stat-sub-sell':'on the listing',
+    'panel-title':'Seller Buybox Detail','col-seller':'Seller','col-type':'Type','col-share':'BB Share','col-rev':'Est. Rev','col-first':'First Seen',
+    'lbl-baseline':'Top Seller Revenue — T12M','lbl-tbr':'Est. Total Brand Rev (Incl. 3P)',
+    'ctrl-recapture':'3P Recapture','ctrl-health':'Listing Health','ctrl-growth':'Growth',
+    'lbl-lbb-lever':'Lost Buybox','lbl-oos-lever':'Out of Stock','lbl-sup-lever':'Suppression',
+    'lbl-rate':'Rate','lbl-solve':'Solve',
+    'lbl-seo':'SEO / Content Lift ($)','lbl-ads':'Ads Growth','lbl-pct-rev':'% rev',
+    'total-title':'Total Brand Opportunity',
+    'chart-sub':'Growth waterfall · all figures directional · not actuals',
+    'leg-base':'Baseline / Total','leg-lbb':'3P Recapture (LBB)','leg-health':'Listing Health Fix','leg-growth':'Growth Levers',
+    'win-btn-lbl':'▲ View search winnability',
+    'win-modal-title':'Digital Search Winnability',
+    'win-col-l':'Winning & High Priority','win-col-r':'Monitor & Develop',
+    'win-clicks-cap':'Clicks captured','win-in-auction':'In auction',
+  },
+  zh: {
+    'bb-section-title':'购物车分析',
+    'lbl-primary':'主要卖家','lbl-lbb':'丢失购物车（第三方）','lbl-oos':'缺货','lbl-sup':'被抑制',
+    'stat-label-primary':'主要卖家','stat-sub-primary':'购物车时间占比',
+    'stat-label-lbb':'丢失购物车（第三方）','stat-sub-lbb':'被其他卖家获取',
+    'stat-label-oos':'缺货','stat-sub-oos':'真实损失收入',
+    'stat-label-sup':'被抑制','stat-sub-sup':'商品不可见',
+    'stat-label-sell':'活跃卖家','stat-sub-sell':'在该商品页面',
+    'panel-title':'卖家购物车详情','col-seller':'卖家','col-type':'类型','col-share':'购物车占比','col-rev':'估计收入','col-first':'首次出现',
+    'lbl-baseline':'主要卖家收入 — 近12个月','lbl-tbr':'估计品牌总收入（含第三方）',
+    'ctrl-recapture':'第三方回收','ctrl-health':'商品健康修复','ctrl-growth':'增长',
+    'lbl-lbb-lever':'丢失购物车','lbl-oos-lever':'缺货','lbl-sup-lever':'抑制',
+    'lbl-rate':'比率','lbl-solve':'解决',
+    'lbl-seo':'SEO / 内容提升 ($)','lbl-ads':'广告增长','lbl-pct-rev':'收入%',
+    'total-title':'品牌总机会',
+    'chart-sub':'增长瀑布图 · 所有数据为方向性估算 · 非实际数据',
+    'leg-base':'基准 / 总计','leg-lbb':'第三方回收（购物车丢失）','leg-health':'商品健康修复','leg-growth':'增长杠杆',
+    'win-btn-lbl':'▲ 查看搜索可赢性',
+    'win-modal-title':'数字搜索可赢性',
+    'win-col-l':'赢得 & 高优先级','win-col-r':'监控 & 发展',
+    'win-clicks-cap':'获得点击','win-in-auction':'参与竞价',
+  }
+};
+let currentLang = 'en';
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  document.getElementById('lang-toggle').textContent = currentLang === 'en' ? '中文' : 'EN';
+  applyLang();
+}
+function t(key) { return LANGS[currentLang][key] || LANGS.en[key] || key; }
+function applyLang() {
+  const L = currentLang;
+  // Section titles
+  const bbt = document.querySelector('.bb-section-title');
+  if(bbt) bbt.childNodes[0].textContent = t('bb-section-title')+' ';
+  // Bar legend labels
+  const legItems = document.querySelectorAll('.bb-leg-item');
+  if(legItems[0]) legItems[0].lastChild.textContent = t('lbl-primary');
+  if(legItems[1]) legItems[1].lastChild.textContent = t('lbl-lbb');
+  if(legItems[2]) legItems[2].lastChild.textContent = t('lbl-oos');
+  if(legItems[3]) legItems[3].lastChild.textContent = t('lbl-sup');
+  // Stat card labels/subs
+  const cardLabels = document.querySelectorAll('.bb-stat-label');
+  const cardSubs   = document.querySelectorAll('.bb-stat-sub');
+  const labelKeys = ['stat-label-primary','stat-label-lbb','stat-label-oos','stat-label-sup','stat-label-sell'];
+  const subKeys   = ['stat-sub-primary','stat-sub-lbb','stat-sub-oos','stat-sub-sup','stat-sub-sell'];
+  labelKeys.forEach((k,i)=>{ if(cardLabels[i]) cardLabels[i].textContent=t(k); });
+  subKeys.forEach((k,i)=>{ if(cardSubs[i]) cardSubs[i].textContent=t(k); });
+  // Controls
+  document.querySelector('.baseline-row label').textContent = t('lbl-baseline');
+  document.querySelector('.tbr-row span:first-child').textContent = t('lbl-tbr');
+  const ctrlTitles = document.querySelectorAll('.ctrl-title');
+  if(ctrlTitles[0]) ctrlTitles[0].childNodes[0].nodeValue = t('ctrl-recapture');
+  if(ctrlTitles[1]) ctrlTitles[1].childNodes[0].nodeValue = t('ctrl-health');
+  if(ctrlTitles[2]) ctrlTitles[2].childNodes[0].nodeValue = t('ctrl-growth');
+  // Lever names
+  const leverNames = document.querySelectorAll('.lever-name');
+  if(leverNames[0]) leverNames[0].textContent = t('lbl-lbb-lever');
+  if(leverNames[1]) leverNames[1].textContent = t('lbl-oos-lever');
+  if(leverNames[2]) leverNames[2].textContent = t('lbl-sup-lever');
+  if(leverNames[3]) leverNames[3].textContent = t('lbl-seo');
+  if(leverNames[4]) leverNames[4].textContent = t('lbl-ads');
+  // Total box
+  document.querySelector('.t-lbl').textContent = t('total-title');
+  // Chart subtitle + legend
+  document.querySelector('.chart-sub').textContent = t('chart-sub');
+  const clegs = document.querySelectorAll('.cleg');
+  const legKeys = ['leg-base','leg-lbb','leg-health','leg-growth'];
+  clegs.forEach((el,i)=>{ if(legKeys[i]) el.lastChild.textContent = t(legKeys[i]); });
+  // Win button
+  const wb = document.querySelector('.win-btn');
+  if(wb) wb.textContent = t('win-btn-lbl');
+  // Win modal
+  const wt = document.querySelector('.w-title');
+  if(wt) wt.innerHTML = currentLang==='zh' ? '数字搜索<em>可赢性</em>' : 'Digital Search <em>Winnability</em>';
+  // Rebuild bar labels on next updateBB
+  updateBB();
+}
+document.addEventListener("DOMContentLoaded", function() { updateBB(); recalc(); });
+</script>
+
+<div class="w-overlay" id="w-overlay" onclick="closeWin()">
+  <div class="w-modal" onclick="event.stopPropagation()">
+    <div class="w-hdr">
+      <div>
+        <div class="w-title">Digital Search <em>Winnability</em></div>
+        <div class="w-summary" id="w-summary"></div>
+      </div>
+      <button class="w-close-btn" onclick="closeWin()">&#x2715; Close</button>
+    </div>
+    <div class="w-body" id="w-body"></div>
+  </div>
+</div>
+</body>
+</html>
